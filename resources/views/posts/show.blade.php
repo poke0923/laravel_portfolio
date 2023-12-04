@@ -6,20 +6,17 @@
 
         <title>Laravel</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
+        
     </head>
     
     <body>
         <h1>Blog Name</h1>
-        @foreach($posts as $post)
-        <a href="/posts/{{$post->id}}">
-        <h2 class=title>{{$post->title}}</h2>
-        </a>
-        <h3 class=body>{{$post->body}}</h3>
-        @endforeach
         
-        {{ $posts->links() }}
+        <h2 class=title>{{$post->title}}</h2>
+        
+        <h3 class=body>{{$post->body}}</h3>
+        
+        <a href="/">back</a>
+        
     </body>
 </html>
