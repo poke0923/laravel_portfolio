@@ -17,5 +17,7 @@
         <h2 class=title>{{$post->title}}</h2>
         <h2 class=body>{{$post->body}}</h2>
         @endforeach
+        
+        {{ $posts->links() }}
     </body>
 </html>
