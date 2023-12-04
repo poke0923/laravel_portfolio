@@ -10,4 +10,8 @@ class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    
+    public function getPaginate($limit=3){
+        return $this->orderBy('updated_at','desc')->paginate($limit);
+    }
 }
