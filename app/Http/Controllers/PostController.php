@@ -11,4 +11,9 @@ class PostController extends Controller
         
         return view('posts.index')->with(['posts'=>$post->getPaginate()]);
     }
+    
+    public function show(Post $post){
+        
+        return view('posts.show')->with(['post'=>$post]);
+    }
 }
