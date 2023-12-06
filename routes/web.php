@@ -20,3 +20,4 @@ Route::get('/posts/{post}',[PostController::class,'show']);
 Route::post('/posts',[PostController::class,'store']);
 Route::get('/posts/{post}/edit',[PostController::class,'edit']);
 Route::put('/posts/{post}/edit',[PostController::class,'update']);
+//データの取得と送信の双方でのやり取りがあるputの時はURLをgetと同じにする必要がある？
