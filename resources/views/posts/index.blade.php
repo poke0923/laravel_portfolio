@@ -19,6 +19,7 @@
         <h2 class=title>{{$post->title}}</h2>
         </a>
         <h3 class=body>{{$post->body}}</h3>
+        <a href="/posts/{{$post->id}}/edit">編集</a>
         @endforeach
         
         {{ $posts->links() }}

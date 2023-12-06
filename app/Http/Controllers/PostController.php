@@ -27,4 +27,13 @@ class PostController extends Controller
         return redirect('/posts/'.$post->id); 
         
     }
+    
+    public function edit(Post $post){
+        return view('posts.edit')->with(['post'=>$post]);
+    }
+    
+    public function update(PostRequest $request,Post $post){
+        $post->update($request['post']);
+        return redirect('/posts/'.$post->id);
+    }
 }
