@@ -14,4 +14,9 @@ class Post extends Model
     public function getPaginate($limit=3){
         return $this->orderBy('updated_at','desc')->paginate($limit);
     }
+    
+    protected $fillable=[
+        'title',
+        'body',
+        ];
 }
