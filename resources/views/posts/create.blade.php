@@ -5,6 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <style>
+            .error{
+                color:red;
+                font-weight:bold
+            }
+        </style>
 
         
     </head>
@@ -17,7 +23,7 @@
         @csrf
             <h2>タイトル</h2>
             <input type="text" name="post[title]" value="{{ old('post.title') }}">
-            <p>{{$errors->first('post.title')}}</p>
+            <p class="error">{{$errors->first('post.title')}}</p>
             <!--
             nameで指定した入れ子の構造（post[title]）は
             それ以降は「.（ドット）」で繋いで取り出すことができる
@@ -25,7 +31,10 @@
             
             <h2>本文</h2>
             <textarea name="post[body]">{{ old('post.body') }}</textarea>
-            <p>{{$errors->first('post.body')}}</p>
+            <p class="error">{{$errors->first('post.body')}}</p>
+            <!--
+            バリデーションのエラーメッセージのattributeはリクエストクラス（PostRequest）で指定できる
+            -->
             </br>
             <input type="submit" value="保存">
             
