@@ -36,4 +36,10 @@ class PostController extends Controller
         $post->update($request['post']);
         return redirect('/posts/'.$post->id);
     }
+    
+    public function delete(Post $post){
+       
+        $post->delete();
+        return redirect('/');
+    }
 }

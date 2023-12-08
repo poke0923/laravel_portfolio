@@ -30,4 +30,12 @@ class PostRequest extends FormRequest
         'post.body' => 'required|min:10',
     ];
     }
+    
+    public function attributes()
+    {
+    return [
+        'post.title' => 'タイトル',
+        'post.body' => '本文'
+    ];
+    }
 }
