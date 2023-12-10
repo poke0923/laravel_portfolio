@@ -16,6 +16,8 @@
         
         <h3 class=body>{{$post->body}}</h3>
         
+        <h3 class=category>{{$post->category->name}}</h3>
+        
         <a href="/">back</a>
         
     </body>
