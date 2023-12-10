@@ -15,8 +15,13 @@ class Post extends Model
         return $this->orderBy('updated_at','desc')->paginate($limit);
     }
     
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+    
     protected $fillable=[
         'title',
         'body',
+        'category_id',
         ];
 }

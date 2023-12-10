@@ -16,25 +16,30 @@ class PostSeeder extends Seeder
     public function run()
     {
         DB::table('posts')->insert([
-            'title'=>'test01',
-            'body'=>'これはテストです',
+            'title'=>'ポケモン',
+            'body'=>'ダウンロードコンテンツがもうすぐ発売です！',
+            'category_id'=>1
             ]);
         
         DB::table('posts')->insert([
-            'title'=>'test02',
-            'body'=>'これはテストです',
+            'title'=>'イチョウ',
+            'body'=>'この前イチョウ並木を見てきました。圧巻！！',
+            'category_id'=>2
             ]);
         DB::table('posts')->insert([
-            'title'=>'test03',
-            'body'=>'これはテストです',
+            'title'=>'ひまわり',
+            'body'=>'夏のひまわり畑が素敵でした',
+            'category_id'=>3
             ]);
         DB::table('posts')->insert([
-            'title'=>'test04',
-            'body'=>'これはテストです',
+            'title'=>'さくら',
+            'body'=>'千葉公園の桜がとてもきれいでした',
+            'category_id'=>2
             ]);
         DB::table('posts')->insert([
-            'title'=>'test05',
-            'body'=>'これはテストです',
+            'title'=>'イルミネーション',
+            'body'=>'六本木に初上陸。イルミネーションにみんな見とれていました。',
+            'category_id'=>3
             ]);
         
     }

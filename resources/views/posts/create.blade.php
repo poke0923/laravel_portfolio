@@ -35,6 +35,14 @@
             <!--
             バリデーションのエラーメッセージのattributeはリクエストクラス（PostRequest）で指定できる
             -->
+            <h2>カテゴリー</h2>
+            <select name="post[category_id]">
+                @foreach($categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                @endforeach
+            </select>
+            </br>
+            </br>
             </br>
             <input type="submit" value="保存">
             
