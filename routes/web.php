@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,5 @@ Route::get('/posts/{post}/edit',[PostController::class,'edit']);
 Route::put('/posts/{post}/edit',[PostController::class,'update']);
 //データの取得と送信の双方でのやり取りがあるputの時はURLをgetと同じにする必要がある？
 Route::delete('/posts/{post}/delete',[PostController::class,'delete']);
+
+Route::get('/categories/{category}',[CategoryController::class,'index']);

@@ -13,15 +13,14 @@
     
     <body>
         <h1>Blog Name</h1>
-        <a href="/posts/create">新しい投稿を作成</a>
+        <a href="/posts/create">create</a>
         @foreach($posts as $post)
         <a href="/posts/{{$post->id}}">
         <h2 class=title>{{$post->title}}</h2>
         </a>
         <h3 class=body>{{$post->body}}</h3>
-        <a href="/categories/{{$post->category->id}}">
         <h4>{{$post->category->name}}</h4>
-        </a>
+        
         <a href="/posts/{{$post->id}}/edit">編集</a>
         
         <form id="{{$post->id}}" action="/posts/{{$post->id}}/delete" method="POST">
