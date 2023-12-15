@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('index') }}
+        </h2>
+    <!--navigation.blade.phpからナビゲーションバーの項目を追加できる-->
+    </x-slot>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +19,10 @@
     </head>
     
     <body>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
         <h1>Blog Name</h1>
         <a href="/posts/create">新しい投稿を作成</a>
         @foreach($posts as $post)
@@ -32,8 +43,13 @@
         </form>
         @endforeach
         
-        {{ $posts->links() }}
+       
         
+                    </div>
+                </div>
+            </div>
+        </div>
+         {{ $posts->links() }}
         <script>
             function deletePost($id){
                 var del = window.confirm("削除すると復元できません。本当に削除しますか。");
@@ -44,4 +60,5 @@
         </script>
         <!--受けっとったidは$idで書くことで関数を動かす-->
     </body>
+    </x-app-layout>
 </html>
