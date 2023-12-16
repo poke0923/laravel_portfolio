@@ -24,14 +24,18 @@ class PostController extends Controller
     public function store(PostRequest $request,Post $post){
 
         $post->user_id = \Auth::id();
+        //https://newmonz.jp/lesson/laravel-basic/chapter-8
+        //このサイトのユーザーid保存の項目の1行を追加。
         $input = $request['post'];
         $post->fill($input)->save();
+        //fillはあくまでカラムの内容を更新するだけ。
+        //user_idについてはその前の行で追加しているからsaveまでいける。
         return redirect('/posts/'.$post->id); 
         
     }
     
-    public function edit(Post $post){
-        return view('posts.edit')->with(['post'=>$post]);
+    public function edit(Category $category,Post $post){
+        return view('posts.edit')->with(['post'=>$post])->with(['categories'=>$category->get()]);
     }
     
     public function update(PostRequest $request,Post $post){
