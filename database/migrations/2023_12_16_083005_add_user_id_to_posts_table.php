@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             //onDelete('cascade')で反映されるのは物理削除のみ。論理削除の場合は投稿は削除されない。
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -28,8 +28,7 @@ return new class extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             //
-            $table->dropForeign('posts_category_id_foreign');
-            $table->dropColumn('category_id');
+            $table->dropColumn('user_id');
         });
     }
 };
