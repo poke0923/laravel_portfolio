@@ -22,7 +22,8 @@ class PostController extends Controller
     }
     
     public function store(PostRequest $request,Post $post){
-        
+
+        $post->user_id = \Auth::id();
         $input = $request['post'];
         $post->fill($input)->save();
         return redirect('/posts/'.$post->id); 
