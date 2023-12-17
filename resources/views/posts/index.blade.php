@@ -33,10 +33,21 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <x-primary-button class="ml-3">
-                            <a href="/posts/create" class="newPost">新しい投稿を作成</a>
+                        
+                        <!-- 検索機能ここから -->
+                        <div>
+                            <form acrion="{{ route('index') }}" method="GET">
+                                @csrf
+                                <input type="text" name="keyword">
+                                <input type="submit" value="検索">
+                            </form>
+                        </div>
+                        <!-- 新規投稿機能ここから -->
+                        <x-primary-button class="ml-3 mt-6">
+                            <a href="{{ route('create') }}" class="newPost">新しい投稿を作成</a>
                         </x-primary-button>
                         
+                        <!-- 投稿一覧表示ここから -->
                         @foreach($posts as $post)
                             <div class="post">
                                 <a href="/posts/{{$post->id}}">
@@ -68,7 +79,10 @@
                 </div>
             </div>
         </div>
-         {{ $posts->links() }}
+         
+         {{$posts->appends(request()->query())->links()}}
+         
+         <!-- 削除機能のポップアップここから -->
         <script>
             function deletePost($id){
                 var del = window.confirm("本当に削除しますか。");
