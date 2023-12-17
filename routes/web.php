@@ -21,6 +21,7 @@ Route::get('/',[PostController::class,'index'])->name('index')->middleware('auth
 
 Route::controller(PostController::class)->middleware('auth')->group(function(){
     Route::get('/','index')->name('index');
+    Route::get('/posts/serch','serch')->name('serch');
     Route::get('/posts/create','create')->name('create');
     Route::get('/posts/{post}','show')->name('show');
     Route::post('/posts','store')->name('store');
@@ -28,6 +29,7 @@ Route::controller(PostController::class)->middleware('auth')->group(function(){
     Route::put('/posts/{post}/edit','update')->name('update');
     //データの取得と送信の双方でのやり取りがあるputの時はURLをgetと同じにする必要がある？
     Route::delete('/posts/{post}/delete','delete')->name('delete');
+   
 });
 //ルートをまとめることはこのサイト https://nextat.co.jp/staff/archives/279
 //間にmiddleware('auth')を挟むと認証済みかどうかも組み込める

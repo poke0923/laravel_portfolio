@@ -24,6 +24,11 @@
     </head>
     
     <body onload="selected({{$post->category_id}})">
+    <!--
+    このonloadでカテゴリーの初期値をもともと選択していたカテゴリーにする。
+    下のほうにjavascriptが書いてある。
+    selected({{$post->category_id}})で関数に投稿のcategory_idを受け渡ししている。
+    -->
         
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -51,12 +56,7 @@
                                     <option value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
                                 
-                                <!--
-                                <option value=1>動物</option>
-                                <option value=2>乗り物</option>
-                                <option value=3>自然</option>
-                                <option value="{{$post->category_id}}" selected>{{$post->category->name}}</option>
-                                -->
+                                
                             </select>
                             </br>
                             <x-primary-button class="ml-3">
@@ -71,16 +71,25 @@
             </div>
         </div>
         <script>
-            function selected(id){
+            function selected(id){ 
+                //selected(id)のidはonloadのところでもらってきたcategory_idのこと
                 select = document.getElementById('category').options;
+                //htmlの方のセレクトボックスにつけたid='category'の内容を取得し、
+                //さらに.optionsでoptionの内容を取得。selectという値に配列として格納している。
                 
                 for(let i = 0; i < select.length; i++){
                     if(select[i].value == id){
+                        //select[i].value == idのところは===にすると動かない
+                        //厳密一致(===)にするとダメな理由はわからない
+                        
                         select[i].selected = true;
                         break;
+                    
                     }
-                    //select[i].value == idのところは===にすると動かない
-                    //厳密一致にするとダメな理由はわからない
+                //if文でselectに格納された配列に対して0から順に配列の中身のvalueについてidと一致するか検証※ここのidはcategor y_idのこと
+                //一致すればtrueが返るのでif内の関数が実行される
+                //if内の関数はその時のselectの配列番号の内容をselected（初期値）にするという意味。
+                //参考：https://teratail.com/questions/123775
                 }
             }
             
