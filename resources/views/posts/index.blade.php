@@ -39,6 +39,12 @@
                             <form acrion="{{ route('index') }}" method="GET">
                                 @csrf
                                 <input type="text" name="keyword">
+                                <select name="category_id">
+                                    <option value="0">すべて</option>
+                                @foreach($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                @endforeach
+                                </select>
                                 <input type="submit" value="検索">
                             </form>
                         </div>
@@ -81,6 +87,8 @@
         </div>
          
          {{$posts->appends(request()->query())->links()}}
+         <!--https://qiita.com/wbraver/items/b95814d6383172b07a58-->
+         
          
          <!-- 削除機能のポップアップここから -->
         <script>

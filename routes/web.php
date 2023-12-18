@@ -21,7 +21,6 @@ Route::get('/',[PostController::class,'index'])->name('index')->middleware('auth
 
 Route::controller(PostController::class)->middleware('auth')->group(function(){
     Route::get('/','index')->name('index');
-    Route::get('/posts/serch','serch')->name('serch');
     Route::get('/posts/create','create')->name('create');
     Route::get('/posts/{post}','show')->name('show');
     Route::post('/posts','store')->name('store');
