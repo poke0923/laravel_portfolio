@@ -12,11 +12,11 @@ class Post extends Model
     use HasFactory;
     use SoftDeletes;
     
-    /*
+    
     public function getPaginate($limit=3){
         return $this->orderBy('updated_at','desc')->paginate($limit);
     }
-    */
+    
     public function category(){
         return $this->belongsTo(Category::class);
     }
@@ -25,16 +25,25 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function getSerchedPaginate($limit=3){
+    public static function search($keyword, $categoryId, $pagination)
+    {
+        //投稿データを全件取得
+        $query = self::query();
         
-        $query=$this->query();
-        
-        if(!empty($keyword)) {//$keyword　が空ではない場合、検索処理を実行します
-            $query->where('title', 'LIKE', "%{$keyword}%");
+        //投稿検索(キーワード)
+        if (!empty($keyword)) {
+            $query->where('title', 'LIKE', "%{$keyword}%")
+                  ->orWhere('body', 'LIKE', "%{$keyword}%");
         }
+        // https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
         
-        return $query->orderBy('updated_at','desc')->paginate($limit);
+        //投稿検索（カテゴリー）
+        if (!empty($categoryId)) {
+            $query->where('category_id', 'LIKE', $categoryId);
+        }
+        // https://qiita.com/hinako_n/items/96584b4a641097c753c7
         
+        return $query->orderBy('updated_at', 'desc')->paginate($pagination);
     }
     
     protected $fillable=[

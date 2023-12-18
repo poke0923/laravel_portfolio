@@ -10,21 +10,16 @@ use App\Models\Category;
 class PostController extends Controller
 {
     //投稿一覧表示
-    public function index(Request $request,Post $post){
+    public function index(Request $request, Post $post, Category $category){
+        //Requestのパラメータを取得
+        $keyword = $request -> input('keyword');
+        $categoryId = $request -> input('category_id');
+        $pagination = 3;
         
-        /* キーワードから検索処理 */
-        $keyword = $request->input('keyword');
-        
-        $query=$post->query();
-        
-        if(!empty($keyword)) {//$keyword　が空ではない場合、検索処理を実行します
-            $query->where('title', 'LIKE', "%{$keyword}%")->orWhere('body', 'LIKE', "%{$keyword}%");
-        }
-        
-        $serched_posts=$query->orderBy('updated_at','desc')->paginate(3);
-        
-        return view('posts.index', ['posts' => $serched_posts]);
+        return view('posts.index') -> with(['posts' => $post -> search($keyword,$categoryId,$pagination)]) //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
+                                    -> with(['categories' => $category -> get()]);
     }
+    
     
     //投稿詳細表示
     public function show(Post $post){
