@@ -18,11 +18,15 @@ class Post extends Model
     }
     
     public function category(){
-        return $this->belongsTo(Category::class);
+        return $this -> belongsTo(Category::class);
     }
     
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this -> belongsTo(User::class);
+    }
+    
+    public function users(){
+        return $this -> belongsToMany(User::class,'favorites');
     }
     
     public function favorites(){
@@ -34,18 +38,16 @@ class Post extends Model
         //投稿データを全件取得
         $query = self::query();
         
-        //投稿検索(キーワード)
+        //投稿検索(キーワード) https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
         if (!empty($keyword)) {
             $query->where('title', 'LIKE', "%{$keyword}%")
                   ->orWhere('body', 'LIKE', "%{$keyword}%");
         }
-        // https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
         
-        //投稿検索（カテゴリー）
+        //投稿検索（カテゴリー） https://qiita.com/hinako_n/items/96584b4a641097c753c7
         if (!empty($categoryId)) {
             $query->where('category_id', 'LIKE', $categoryId);
         }
-        // https://qiita.com/hinako_n/items/96584b4a641097c753c7
         
         return $query->orderBy('updated_at', 'desc')->paginate($pagination);
     }
