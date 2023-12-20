@@ -25,6 +25,10 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
     
+    public function favorites(){
+        return $this -> hasMany(Favorite::class);
+    }
+    
     public static function search($keyword, $categoryId, $pagination)
     {
         //投稿データを全件取得
@@ -44,6 +48,22 @@ class Post extends Model
         // https://qiita.com/hinako_n/items/96584b4a641097c753c7
         
         return $query->orderBy('updated_at', 'desc')->paginate($pagination);
+    }
+    
+    //お気に入り状態の判別 https://qiita.com/phper_sugiyama/items/9a4088d1ca816a7e3f29
+    public function is_favorited(){
+        $id = \Auth::id();
+
+        $favoriters = array();
+        foreach($this->favorites as $favorite) { //$this->favoritesでfavoritesテーブルからpost_idで絞り込みされた配列が取り出されている？
+            array_push($favoriters, $favorite->user_id);
+        }
+        
+        if (in_array($id, $favoriters)) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     protected $fillable=[

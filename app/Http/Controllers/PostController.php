@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Favorite;
 
 class PostController extends Controller
 {
@@ -20,10 +21,12 @@ class PostController extends Controller
                                     -> with(['categories' => $category -> get()]);
     }
     
-    
     //投稿詳細表示
     public function show(Post $post){
-        return view('posts.show')->with(['post'=>$post]);
+        
+        $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
+        
+        return view('posts.show', compact('post', 'favorite'))->with(['post'=>$post]);
     }
     
     //新規投稿作成
