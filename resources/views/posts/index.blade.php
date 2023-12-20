@@ -66,7 +66,35 @@
                                 <div class="flex justify-end mt-4">
                                     <p class=user>投稿者：{{$post->user->name}}</p>
                                 </div>
-                                    <a href="/posts/{{$post->id}}/edit">編集</a>
+                                
+                                <!-- お気に入り機能ここから -->
+                                <!--https://biz.addisteria.com/laravel_nice_button/-->
+                                <span>
+                                    <!-- もし$favoriteがあれば＝ユーザーが「いいね」をしていたら -->
+                                    @if( $post -> is_favorited() )
+                                    
+                                    <!-- 「いいね」取消用ボタンを表示 -->
+                                    	<a href="{{ route('unfavorite', $post) }}" class="btn btn-success btn-sm">
+                                    		いいね取り消し
+                                    		<!-- 「いいね」の数を表示 -->
+                                    		<span class="badge">
+                                    			{{ $post->favorites->count() }}
+                                    		</span>
+                                    	</a>
+                                    @else
+                                    <!-- まだユーザーが「いいね」をしていなければ、「いいね」ボタンを表示 -->
+                                    	<a href="{{ route('favorite', $post) }}" class="btn btn-secondary btn-sm">
+                                    		いいね
+                                    		<!-- 「いいね」の数を表示 -->
+                                    		<span class="badge">
+                                    			{{ $post->favorites->count() }}
+                                    		</span>
+                                    	</a>
+                                    @endif
+                                </span>
+                                
+                                </br>
+                                <a href="/posts/{{$post->id}}/edit">編集</a>
                                 
                                 <form id="{{$post->id}}" action="/posts/{{$post->id}}/delete" method="POST">
                                     @csrf
@@ -100,6 +128,8 @@
             }
         </script>
         <!--受けっとったidは$idで書くことで関数を動かす-->
+        
+        
     </body>
     </x-app-layout>
 </html>

@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //onDelete('cascade')で反映されるのは物理削除のみ。論理削除の場合は投稿は削除されない。
+        Schema::create('favorites', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -26,10 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //
-            $table->dropForeign('posts_user_id_foreign');
-            $table->dropColumn('user_id');
-        });
+        Schema::dropIfExists('favorites');
     }
 };

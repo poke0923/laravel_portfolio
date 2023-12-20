@@ -30,6 +30,31 @@
                             <p class=user>投稿者：{{$post->user->name}}</p>
                         </div>
                         
+                        <span>
+                                    <img src="{{asset('img/nicebutton.png')}}" width="30px">
+                                     
+                                    <!-- もし$favoriteがあれば＝ユーザーが「いいね」をしていたら -->
+                                    @if($favorite)
+                                    <!-- 「いいね」取消用ボタンを表示 -->
+                                    	<a href="{{ route('unfavorite', $post) }}" class="btn btn-success btn-sm">
+                                    		いいね取り消し
+                                    		<!-- 「いいね」の数を表示 -->
+                                    		<span class="badge">
+                                    			{{ $post->favorites->count() }}
+                                    		</span>
+                                    	</a>
+                                    @else
+                                    <!-- まだユーザーが「いいね」をしていなければ、「いいね」ボタンを表示 -->
+                                    	<a href="{{ route('favorite', $post) }}" class="btn btn-secondary btn-sm">
+                                    		いいね
+                                    		<!-- 「いいね」の数を表示 -->
+                                    		<span class="badge">
+                                    			{{ $post->favorites->count() }}
+                                    		</span>
+                                    	</a>
+                                    @endif
+                                </span>
+                        
                         <a href="/">back</a>
                     </div>
                 </div>
