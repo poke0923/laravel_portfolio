@@ -53,19 +53,10 @@ class Post extends Model
     }
     
     //お気に入り状態の判別 https://qiita.com/phper_sugiyama/items/9a4088d1ca816a7e3f29
-    public function is_favorited(){
+    public function is_favorited($post){
         $id = \Auth::id();
 
-        $favoriters = array();
-        foreach($this->favorites as $favorite) { //$this->favoritesでfavoritesテーブルからpost_idで絞り込みされた配列が取り出されている？
-            array_push($favoriters, $favorite->user_id);
-        }
-        
-        if (in_array($id, $favoriters)) {
-            return true;
-        } else {
-            return false;
-        }
+        return $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
     }
     
     protected $fillable=[

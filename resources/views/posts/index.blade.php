@@ -71,7 +71,7 @@
                                 <!--https://biz.addisteria.com/laravel_nice_button/-->
                                 <span>
                                     <!-- もし$favoriteがあれば＝ユーザーが「いいね」をしていたら -->
-                                    @if( $post -> is_favorited() )
+                                    @if( $post -> is_favorited($post) )
                                     
                                     <!-- 「いいね」取消用ボタンを表示 -->
                                     	<a href="{{ route('unfavorite', $post) }}" class="btn btn-success btn-sm">
