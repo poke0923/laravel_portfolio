@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\RankController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Route::controller(FavoriteController::class) -> middleware( 'auth' )-> group( fu
     Route::get('/posts/{post}/unfavorite','unfavorite') -> name('unfavorite');
     Route::get('/favorites','favorite_posts') -> name('index_favorites');
 });
+
+Route::get('/ranking', [RankController::class, 'index'])->name('ranking.index');
     
 
 Route::get('/dashboard', function () {
