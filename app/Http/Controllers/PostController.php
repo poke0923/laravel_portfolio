@@ -16,9 +16,14 @@ class PostController extends Controller
         $keyword = $request -> input('keyword');
         $categoryId = $request -> input('category_id');
         $pagination = 3;
+        $tag = $post->tags()->get();
         
-        return view('posts.index') -> with(['posts' => $post -> search($keyword,$categoryId,$pagination)]) //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
-                                    -> with(['categories' => $category -> get()]);
+        
+        return view('posts.index')->with([
+            'posts' => $post->search($keyword,$categoryId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
+            'categories' => $category -> get(),
+            
+        ]);
     }
     
     //投稿詳細表示

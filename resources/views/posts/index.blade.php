@@ -63,6 +63,9 @@
                                 <a href="/categories/{{$post->category->id}}">
                                     <h4>{{$post->category->name}}</h4>
                                 </a>
+                                @foreach($post->post_tags($post) as $tag)
+                                    <p>{{$tag->name}}</p>
+                                @endforeach
                                 <div class="flex justify-end mt-4">
                                     <p class=user>投稿者：{{$post->user->name}}</p>
                                 </div>

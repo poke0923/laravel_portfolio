@@ -33,6 +33,10 @@ class Post extends Model
         return $this -> hasMany(Favorite::class);
     }
     
+    public function tags(){
+        return $this -> belongsToMany(Tag::class);
+    }
+    
     public static function search($keyword, $categoryId, $pagination)
     {
         //投稿データを全件取得
@@ -57,6 +61,13 @@ class Post extends Model
         $id = \Auth::id();
 
         return $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
+    }
+    
+    public function post_tags($post){
+        $tags = $post->tags()->get();
+       
+        return $tags;
+        
     }
     
     protected $fillable=[

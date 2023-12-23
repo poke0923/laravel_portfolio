@@ -43,9 +43,6 @@ Route::controller(FavoriteController::class) -> middleware( 'auth' )-> group( fu
     Route::get('/favorites','favorite_posts') -> name('index_favorites');
 });
 
-Route::get('/ranking', [RankController::class, 'index'])->name('ranking.index');
-    
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
