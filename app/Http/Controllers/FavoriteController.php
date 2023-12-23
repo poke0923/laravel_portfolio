@@ -30,6 +30,9 @@ class FavoriteController extends Controller
     public function favorite_posts(Category $category){
         $post = \Auth::user() -> posts() -> orderBy( 'updated_at', 'desc' ) -> paginate(3);
     
-        return view('favorites.index') -> with(['posts'=>$post])-> with(['categories' => $category -> get()]);;
+        return view('favorites.index')->with([
+            'posts' => $post,
+            'categories' => $category->get()
+            ]);
     }
 }
