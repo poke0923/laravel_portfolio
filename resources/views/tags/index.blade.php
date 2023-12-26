@@ -3,7 +3,7 @@
     <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('投稿一覧') }}
+            {{$tag->name}}の投稿一覧
         </h2>
     <!--navigation.blade.phpからナビゲーションバーの項目を追加できる-->
     </x-slot>

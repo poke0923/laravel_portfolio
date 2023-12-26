@@ -23,7 +23,7 @@
         
     </head>
     
-    <body onload="selected({{$post->category_id}})">
+    <body onload="selected({{$post->category_id}});selectedTag($selectedTags)">
     <!--
     このonloadでカテゴリーの初期値をもともと選択していたカテゴリーにする。
     下のほうにjavascriptが書いてある。
@@ -52,14 +52,23 @@
                             <h2>カテゴリー</h2>
                             <select id="category" name="post[category_id]">
                                
-                                 @foreach($categories as $category)
+                                @foreach($categories as $category)
                                     <option value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
                                 
-                                
                             </select>
+                            
+                            <h2>tag</h2>
+                            @foreach($tags as $tag)
+                                <input type="checkbox" name="tag[]" value="{{$tag->id}}" <?=($tag->tagCheck($selectedTags,$tag))?"checked":"" ?>><label>{{$tag->name}}</label>
+                                <!--
+                                checkedの条件分岐の書き方参考 https://teratail.com/questions/237098
+                                <条件?"条件成立":"不成立">の書き方はjavascriptの書き方。両サイドのはてながわからない。
+                                -->
+                            @endforeach
+                            
                             </br>
-                            <x-primary-button class="ml-3">
+                            <x-primary-button class="mt-3">
                                 {{ __('保存') }}
                             </x-primary-button>
                             
@@ -86,27 +95,14 @@
                         break;
                     
                     }
-                //if文でselectに格納された配列に対して0から順に配列の中身のvalueについてidと一致するか検証※ここのidはcategor y_idのこと
+                //if文でselectに格納された配列に対して0から順にselectの中のvalueについてidと一致するか検証※ここのidはcategor y_idのこと
                 //一致すればtrueが返るのでif内の関数が実行される
                 //if内の関数はその時のselectの配列番号の内容をselected（初期値）にするという意味。
                 //参考：https://teratail.com/questions/123775
                 }
             }
-            
-           
-        /*
-             window.onload = function() {
-                select = document.getElementById('category').options;
-                for(let i = 0; i < select.length; i++ ){
-                    if(select[i].value === '3'){
-                        select[i].selected = true;
-                        break;
-                    }
-                }
-            }   
-        
-        */    
         </script>
+        
     </body>
     
     </x-app-layout>
