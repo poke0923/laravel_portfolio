@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\RankController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +42,8 @@ Route::controller(FavoriteController::class) -> middleware( 'auth' )-> group( fu
     Route::get('/posts/{post}/unfavorite','unfavorite') -> name('unfavorite');
     Route::get('/favorites','favorite_posts') -> name('index_favorites');
 });
+
+Route::get('/tags/{tag}',[TagController::class,'index']) -> middleware('auth');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

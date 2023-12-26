@@ -7,6 +7,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Favorite;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -16,9 +17,7 @@ class PostController extends Controller
         $keyword = $request -> input('keyword');
         $categoryId = $request -> input('category_id');
         $pagination = 3;
-        $tag = $post->tags()->get();
-        
-        
+      
         return view('posts.index')->with([
             'posts' => $post->search($keyword,$categoryId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
             'categories' => $category -> get(),
@@ -31,22 +30,28 @@ class PostController extends Controller
         
         $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
         
-        return view('posts.show', compact('post', 'favorite'))->with(['post'=>$post]);
+        return view('posts.show', compact('favorite'))->with(['post'=>$post]);
     }
     
     //新規投稿作成
-    public function create(Category $category){
-        return view('posts.create')->with(['categories'=>$category->get()]);
+    public function create(Category $category, Tag $tag){
+        return view('posts.create')->with([
+            'categories' => $category->get(),
+            'tags' => $tag->get(),
+        ]);
     }
     
     //新規投稿保存
-    public function store(PostRequest $request,Post $post){
+    public function store(PostRequest $request, Post $post){
 
         $post->user_id = \Auth::id();
         //https://newmonz.jp/lesson/laravel-basic/chapter-8
         //このサイトのユーザーid保存の項目の1行を追加。
         $input = $request['post'];
         $post->fill($input)->save();
+        
+        $postTag = $request['tag'];
+        $post->tags()->attach($postTag);
         //fillはあくまでカラムの内容を更新するだけ。
         //user_idについてはその前の行で追加しているからsaveまでいける。
         return redirect('/posts/'.$post->id); 
@@ -54,13 +59,23 @@ class PostController extends Controller
     }
     
     //投稿編集
-    public function edit(Category $category,Post $post){
-        return view('posts.edit')->with(['post'=>$post])->with(['categories'=>$category->get()]);
+    public function edit(Category $category,Post $post,Tag $tag){
+        
+        $selectedTag=$post->tags()->get();
+        
+        return view('posts.edit')->with([
+            'post' => $post,
+            'categories' => $category->get(),
+            'tags' => $tag->get(),
+            'selectedTags' => $selectedTag,
+        ]);
     }
     
     //投稿編集保存
     public function update(PostRequest $request,Post $post){
         $post->update($request['post']);
+        $postTag = $request['tag'];
+        $post->tags()->sync($postTag);
         return redirect('/posts/'.$post->id);
     }
     
