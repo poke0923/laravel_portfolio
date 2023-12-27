@@ -61,13 +61,10 @@ class PostController extends Controller
     //投稿編集
     public function edit(Category $category,Post $post,Tag $tag){
         
-        $selectedTag=$post->tags()->get();
-        
         return view('posts.edit')->with([
             'post' => $post,
             'categories' => $category->get(),
             'tags' => $tag->get(),
-            'selectedTags' => $selectedTag,
         ]);
     }
     
