@@ -82,7 +82,9 @@
                 </div>
             </div>
         </div>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD0B-AbnVUi32RvVh5q5Ox0OXm8PKdoXs&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
+
         <script>
           function initAutocomplete() {
             const map = new google.maps.Map(document.getElementById("map"), {
