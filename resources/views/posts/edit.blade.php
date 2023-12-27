@@ -97,6 +97,7 @@
             </div>
         </div>
         <script src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
+
         <script>
           function initAutocomplete($post) {
             const map = new google.maps.Map(document.getElementById("map"), {
