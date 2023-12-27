@@ -47,6 +47,7 @@ class PostController extends Controller
         $post->user_id = \Auth::id();
         //https://newmonz.jp/lesson/laravel-basic/chapter-8
         //このサイトのユーザーid保存の項目の1行を追加。
+        
         $input = $request['post'];
         $post->fill($input)->save();
         
