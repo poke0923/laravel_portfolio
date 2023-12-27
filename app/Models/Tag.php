@@ -13,6 +13,7 @@ class Tag extends Model
         return $this -> belongsToMany(Post::class);
     }
     
+    //投稿編集画面でのタグの初期値設定
     public function tagCheck($selectedTags,$tag){
         
         foreach($selectedTags as $selectedTag){

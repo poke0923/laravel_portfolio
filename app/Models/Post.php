@@ -63,6 +63,7 @@ class Post extends Model
         return $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
     }
     
+    //投稿ごとのタグ取得
     public function post_tags($post){
         $tags = $post->tags()->get();
        

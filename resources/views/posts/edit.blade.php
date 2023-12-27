@@ -23,7 +23,7 @@
         
     </head>
     
-    <body onload="selected({{$post->category_id}});selectedTag($selectedTags)">
+    <body>
     <!--
     このonloadでカテゴリーの初期値をもともと選択していたカテゴリーにする。
     下のほうにjavascriptが書いてある。
@@ -53,17 +53,23 @@
                             <select id="category" name="post[category_id]">
                                
                                 @foreach($categories as $category)
-                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                    <option value="{{$category->id}}"{{ $category->id === $post->category_id ? "selected":"" }}>{{$category->name}}</option>
                                 @endforeach
                                 
                             </select>
                             
                             <h2>tag</h2>
                             @foreach($tags as $tag)
-                                <input type="checkbox" name="tag[]" value="{{$tag->id}}" <?=($tag->tagCheck($selectedTags,$tag))?"checked":"" ?>><label>{{$tag->name}}</label>
+                                <input type="checkbox" name="tag[]" value="{{$tag->id}}" {{ in_array($tag->id, $post->tags->pluck('id')->toArray()) ? 'checked' : '' }}><label>{{$tag->name}}</label>
                                 <!--
-                                checkedの条件分岐の書き方参考 https://teratail.com/questions/237098
-                                <条件?"条件成立":"不成立">の書き方はjavascriptの書き方。両サイドのはてながわからない。
+                                {{in_array()?'checked':''}}これの?以降で場合分け。trueならchecked、falseなら''を返す
+                                in_array(探したい値, 配列)で配列の中に探したい値があればtrue、なければfalseを返す
+                                やりたいことは「このタグのidってこのポストが持つタグのidと一致してますか？」ということなので
+                                1.探したい値にこのタグのid、配列にこの投稿の持つタグのidを持ってくる
+                                2.この投稿の持つタグのidは$postでこの投稿を取得
+                                3.tagsでこの投稿が持つタグにアクセス、
+                                4.pluck('id')でアクセスした先のデータからidだけ取得 https://qiita.com/jacksuzuki/items/eae943735bda747be09c
+                                5.toArrayで配列に変換している。
                                 -->
                             @endforeach
                             
@@ -79,29 +85,7 @@
                 </div>
             </div>
         </div>
-        <script>
-            function selected(id){ 
-                //selected(id)のidはonloadのところでもらってきたcategory_idのこと
-                select = document.getElementById('category').options;
-                //htmlの方のセレクトボックスにつけたid='category'の内容を取得し、
-                //さらに.optionsでoptionの内容を取得。selectという値に配列として格納している。
-                
-                for(let i = 0; i < select.length; i++){
-                    if(select[i].value == id){
-                        //select[i].value == idのところは===にすると動かない
-                        //厳密一致(===)にするとダメな理由はわからない
-                        
-                        select[i].selected = true;
-                        break;
-                    
-                    }
-                //if文でselectに格納された配列に対して0から順にselectの中のvalueについてidと一致するか検証※ここのidはcategor y_idのこと
-                //一致すればtrueが返るのでif内の関数が実行される
-                //if内の関数はその時のselectの配列番号の内容をselected（初期値）にするという意味。
-                //参考：https://teratail.com/questions/123775
-                }
-            }
-        </script>
+        
         
     </body>
     
