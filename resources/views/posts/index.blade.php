@@ -70,6 +70,24 @@
                                 @endforeach
                                 <div class="flex justify-end mt-4">
                                     <p class=user>投稿者：{{$post->user->name}}</p>
+                                    </br>
+                                    <p>フォロワー数：{{$post->follow_count($post)}}</p>
+                                    </br>
+                                    <!-- フォロー機能ここから -->
+                                    <span>
+                                        @if($post->user_id !== Auth::user()->id )
+                                            @if( $post->is_followed($post) )
+                                            	<a href = "{{ route('unfollow', $post->user_id) }}" class="btn btn-success btn-sm">
+                                            		フォロー解除
+                                            	</a>
+                                            @else
+                                            	<a href = "{{ route('follow', $post->user_id) }}" class="btn btn-secondary btn-sm">
+                                            		フォローする
+                                            	</a>
+                                            @endif
+                                        @endif
+                                        
+                                        </span>
                                 </div>
                                 
                                 <!-- お気に入り機能ここから -->

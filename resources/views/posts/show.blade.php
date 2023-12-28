@@ -85,21 +85,21 @@
       let map;
       
       async function initMap($post) {
-        // The location of Uluru
+        
         const position = { lat: {{$post->latitude}}, lng: {{$post->longitude}} };
         // Request needed libraries.
         //@ts-ignore
         const { Map } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
       
-        // The map, centered at Uluru
+        // The map
         map = new Map(document.getElementById("map"), {
           zoom: 13,
           center: position,
           mapId: "MAP_ID",
         });
       
-        // The marker, positioned at Uluru
+        // The marker
         const marker = new AdvancedMarkerView({
           map: map,
           position: position,

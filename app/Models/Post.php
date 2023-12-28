@@ -71,6 +71,18 @@ class Post extends Model
         
     }
     
+    //フォロー状態の判別
+    public function is_followed($post){
+        $id = \Auth::id();
+
+        return $follow=Follow::where('follower_id', \Auth::user()->id)->where('followee_id', $post->user->id)->exists();
+    }
+    
+    //
+    public function follow_count($post){
+        return $count = \App\Models\Follow::where('followee_id', $post->user_id)->count();
+    }
+    
     protected $fillable=[
         'title',
         'body',

@@ -20,6 +20,9 @@
                     <x-nav-link :href="route('index_favorites')" :active="request()->routeIs('index_favorites')">
                         {{ __('お気に入り一覧') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('index_follows')" :active="request()->routeIs('index_follows')">
+                        {{ __('フォロー中のユーザーの投稿') }}
+                    </x-nav-link>
                    
                 </div>
             </div>
