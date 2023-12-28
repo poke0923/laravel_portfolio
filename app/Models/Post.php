@@ -37,7 +37,7 @@ class Post extends Model
         return $this -> belongsToMany(Tag::class);
     }
     
-    public static function search($keyword, $categoryId, $pagination)
+    public static function search($keyword, $categoryId,$tagsId, $pagination)
     {
         //投稿データを全件取得
         $query = self::query();
@@ -52,6 +52,14 @@ class Post extends Model
         if (!empty($categoryId)) {
             $query->where('category_id', 'LIKE', $categoryId);
         }
+        if (!empty($tagsId)) {
+            $query->whereHas('tags',function($q)use($tagsId){
+                $q->whereIn('post_tag.tag_id',$tagsId);
+            });
+            }
+            
+        
+        
         
         return $query->orderBy('updated_at', 'desc')->paginate($pagination);
     }
@@ -73,12 +81,10 @@ class Post extends Model
     
     //フォロー状態の判別
     public function is_followed($post){
-        $id = \Auth::id();
-
         return $follow=Follow::where('follower_id', \Auth::user()->id)->where('followee_id', $post->user->id)->exists();
     }
     
-    //
+    //フォロワー数のカウント
     public function follow_count($post){
         return $count = \App\Models\Follow::where('followee_id', $post->user_id)->count();
     }

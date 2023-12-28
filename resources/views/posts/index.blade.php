@@ -45,6 +45,9 @@
                                     <option value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
                                 </select>
+                                @foreach($tags as $tag)
+                                    <input type="checkbox" name="tag[]" value="{{$tag->id}}"><label>{{$tag->name}}</label>
+                                @endforeach
                                 <input type="submit" value="検索">
                             </form>
                         </div>
