@@ -3,7 +3,7 @@
     <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('投稿一覧') }}
+            {{$user->name}}の投稿
         </h2>
     <!--navigation.blade.phpからナビゲーションバーの項目を追加できる-->
     </x-slot>
@@ -34,20 +34,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         
-                        <!-- 検索機能ここから -->
-                        <div>
-                            <form acrion="{{ route('index') }}" method="GET">
-                                @csrf
-                                <input type="text" name="keyword">
-                                <select name="category_id">
-                                    <option value="0">すべて</option>
-                                @foreach($categories as $category)
-                                    <option value="{{$category->id}}">{{$category->name}}</option>
-                                @endforeach
-                                </select>
-                                <input type="submit" value="検索">
-                            </form>
-                        </div>
+                        
                         <!-- 新規投稿機能ここから -->
                         <x-primary-button class="ml-3 mt-6">
                             <a href="{{ route('create') }}" class="newPost">新しい投稿を作成</a>

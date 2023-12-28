@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
+use App\Models\Post;
 
 class ProfileController extends Controller
 {
@@ -56,5 +58,11 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+    
+    public function profile(User $user, Post $post){
+        $post = $post->where('user_id', $user->id)->orderBy( 'updated_at', 'desc' )->paginate(3);
+        
+        return view('profile.user',compact('user'))->with([ 'posts'=>$post ]);
     }
 }
