@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //
-            $table->double('latitude',9,7);
-            $table->double('longitude',10,7);
+        Schema::create('follows', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('follower_id')->constrained();
+            $table->foreignId('followee_id')->constrained();
+            $table->timestamps();
         });
     }
 
@@ -27,10 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //
-            $table->dropColumn('latitude');
-            $table->dropColumn('longitude');
-        });
+        Schema::dropIfExists('follows');
     }
 };

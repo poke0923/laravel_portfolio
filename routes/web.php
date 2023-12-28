@@ -6,6 +6,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\FollowController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,15 @@ Route::controller(FavoriteController::class) -> middleware( 'auth' )-> group( fu
 });
 
 Route::get('/tags/{tag}',[TagController::class,'index']) -> middleware('auth');
+
+Route::controller(FollowController::class) -> middleware( 'auth' )-> group( function(){
+    Route::get('/follows/{user}/follow','follow') -> name('follow');
+    Route::get('/follows/{user}/unfollow','unfollow') -> name('unfollow');
+    Route::get('/follows/posts','follows_posts') -> name('index_follows');
+});
+
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
