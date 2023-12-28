@@ -12,16 +12,19 @@ use App\Models\Tag;
 class PostController extends Controller
 {
     //投稿一覧表示
-    public function index(Request $request, Post $post, Category $category){
+    public function index(Request $request, Post $post, Category $category, Tag $tag){
         //Requestのパラメータを取得
-        $keyword = $request -> input('keyword');
-        $categoryId = $request -> input('category_id');
+        
+        $keyword = $request->input('keyword');
+        $categoryId = $request->input('category_id');
+        $tagsId = $request->input('tag');
         $pagination = 3;
+        
       
         return view('posts.index')->with([
-            'posts' => $post->search($keyword,$categoryId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
-            'categories' => $category -> get(),
-            
+            'posts' => $post->search($keyword,$categoryId,$tagsId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
+            'categories' => $category->get(),
+            'tags' => $tag->get(),
         ]);
     }
     
