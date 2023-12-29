@@ -87,5 +87,12 @@ class PostController extends Controller
         return redirect('/');
     }
     
+    //お気に入り数順での投稿取得
+    public function favorite_rank(Post $post,Category  $category){
+        return view('favorites.rank')->with([
+            'posts' => $post->favorite_rank(),
+            'categories' => $category->get(),
+            ]);
+    }
     
 }

@@ -51,8 +51,8 @@
                         <div>
                             <p>並び替え</p>
                             <a href = "/">投稿日時順</a>
-                            <u><a href = "/favorites/rank">お気に入り数順</a></u>
-                            <a href = "/posts/views/rank">閲覧数順</a>
+                            <u><a href = "/favorite/posts/rank">お気に入り数順</a></u>
+                        
                         </div>
                         <!-- 新規投稿機能ここから -->
                         <x-primary-button class="ml-3 mt-6">
