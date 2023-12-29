@@ -127,7 +127,9 @@
                                 </span>
                                 
                                 </br>
+                                @if($post->user_id == Auth::user()->id)
                                 <a href="/posts/{{$post->id}}/edit">編集</a>
+                                @endif
                                 
                                 <form id="{{$post->id}}" action="/posts/{{$post->id}}/delete" method="POST">
                                     @csrf
