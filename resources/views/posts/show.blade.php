@@ -93,6 +93,7 @@
               </a>
             @endif
           </span>
+          <img src="{{ $post->image_path }}" style="max-width:200px;">
                         
           <a href="{{url()->previous()}}">back</a>
           

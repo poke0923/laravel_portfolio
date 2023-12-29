@@ -35,7 +35,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <form action="/posts/{{$post->id}}/edit" method="POST">
+                        <form action="/posts/{{$post->id}}/edit" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                             <h2>投稿タイトル</h2>
@@ -45,6 +45,16 @@
                             nameで指定した入れ子の構造（post[title]）は
                             それ以降は「.（ドット）」で繋いで取り出すことができる
                             -->
+                            <h2>写真</h2>
+                            <p>現在の画像</p>
+                            <img src="{{ $post->image_path }}" style="max-width:200px;">
+                            <p>⇒</p>
+                            <h2>変更後の画像</h2>
+                            <input type="file" name="image" onchange="previewImage(this);">
+                            <p>
+                            Preview:<br>
+                            <img id="preview" src="" style="max-width:200px;">
+                            </p>
                             
                             <h2>写真説明</h2>
                             <textarea name="post[body]">{{ old('post.body',$post->body) }}</textarea>
@@ -187,6 +197,16 @@
           }
           
           window.initAutocomplete = initAutocomplete;
+        </script>
+        <script>
+          function previewImage(obj)
+          {
+          	var fileReader = new FileReader();
+          	fileReader.onload = (function() {
+          		document.getElementById('preview').src = fileReader.result;
+          	});
+          	fileReader.readAsDataURL(obj.files[0]);
+          }
         </script>
         
     </body>

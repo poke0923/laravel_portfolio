@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\Favorite;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -51,13 +52,26 @@ class PostController extends Controller
         //https://newmonz.jp/lesson/laravel-basic/chapter-8
         //このサイトのユーザーid保存の項目の1行を追加。
         
+       
+        //s3アップロード開始
+        $image = $request->file('image');
+       
+        // バケットの`myprefix`フォルダへアップロード
+        $path = Storage::disk('s3')->putFile('/', $image,'public');
+        
+        // アップロードした画像のフルパスを取得
+        $post->image_path = Storage::disk('s3')->url($path);
+        
         $input = $request['post'];
         $post->fill($input)->save();
+        //fillはあくまでカラムの内容を更新するだけ。
+        //user_idについてはその前の行で追加しているからsaveまでいける。
         
         $postTag = $request['tag'];
         $post->tags()->attach($postTag);
-        //fillはあくまでカラムの内容を更新するだけ。
-        //user_idについてはその前の行で追加しているからsaveまでいける。
+        
+        
+        
         return redirect('/posts/'.$post->id); 
         
     }
@@ -74,6 +88,14 @@ class PostController extends Controller
     
     //投稿編集保存
     public function update(PostRequest $request,Post $post){
+         //s3アップロード開始
+        $image = $request->file('image');
+       
+        // バケットの`myprefix`フォルダへアップロード
+        $path = Storage::disk('s3')->putFile('/', $image,'public');
+        
+        // アップロードした画像のフルパスを取得
+        $post->image_path = Storage::disk('s3')->url($path);
         $post->update($request['post']);
         $postTag = $request['tag'];
         $post->tags()->sync($postTag);
@@ -94,5 +116,7 @@ class PostController extends Controller
             'categories' => $category->get(),
             ]);
     }
+    
+
     
 }

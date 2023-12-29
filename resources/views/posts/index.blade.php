@@ -78,6 +78,7 @@
                                         <p>{{$tag->name}}</p>
                                     </a>
                                 @endforeach
+                                <img src="{{ $post->image_path }}" style="max-width:200px;">
                                 <div class="flex justify-end mt-4">
                                     <a href={{ route('profile',$post->user_id) }}><p class=user>投稿者：{{$post->user->name}}</p></a>
                                     </br>

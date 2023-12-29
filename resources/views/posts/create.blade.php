@@ -28,7 +28,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <form action="/posts" method="POST">
+                        <form action="/posts" method="POST" enctype="multipart/form-data">
                         @csrf
                             <h2>投稿タイトル</h2>
                             <input type="text" name="post[title]" value="{{ old('post.title') }}">
@@ -68,12 +68,15 @@
                             <div>lat: <input id="lat" name="post[latitude]" type="text"/></div>
                             <div>lng: <input id="lng" name="post[longitude]" type="text"/></div>
                             
+                            <input type="file" name="image" onchange="previewImage(this);">
+                            <p>
+                            Preview:<br>
+                            <img id="preview" src="" style="max-width:200px;">
+                            </p>
                             </br>
                             </br>
                             </br>
-                            <x-primary-button class="ml-3">
-                                {{ __('保存') }}
-                            </x-primary-button>
+                            <input type="submit" value="保存">
                             
                         </form>
                         
@@ -166,7 +169,16 @@
           
           window.initAutocomplete = initAutocomplete;
         </script>
-        
+        <script>
+          function previewImage(obj)
+          {
+          	var fileReader = new FileReader();
+          	fileReader.onload = (function() {
+          		document.getElementById('preview').src = fileReader.result;
+          	});
+          	fileReader.readAsDataURL(obj.files[0]);
+          }
+        </script>
     </body>
     </x-app-layout>
 </html>
