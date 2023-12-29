@@ -96,7 +96,7 @@
                 </div>
             </div>
         </div>
-        <script src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key={{config('services.googleMap.apikey')}}&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
 
         <script>
           function initAutocomplete($post) {
