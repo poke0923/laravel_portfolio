@@ -51,6 +51,13 @@
                                 <input type="submit" value="検索">
                             </form>
                         </div>
+                        <!--並び替え機能ここから-->
+                        <div>
+                            <p>並び替え</p>
+                            <a href = "/">投稿日時順</a>
+                            <a href = "/favorite/posts/rank">お気に入り数順</a>
+                        
+                        </div>
                         <!-- 新規投稿機能ここから -->
                         <x-primary-button class="ml-3 mt-6">
                             <a href="{{ route('create') }}" class="newPost">新しい投稿を作成</a>

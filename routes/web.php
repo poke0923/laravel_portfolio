@@ -32,6 +32,7 @@ Route::controller(PostController::class)->middleware('auth')->group(function(){
     Route::put('/posts/{post}/edit','update')->name('update'); //投稿編集保存
     //データの取得と送信の双方でのやり取りがあるputの時はURLをgetと同じにする必要がある？
     Route::delete('/posts/{post}/delete','delete')->name('delete'); //投稿削除
+    Route::get('/favorite/posts/rank','favorite_rank')->name('favorite_rank');
 });
 //ルートをまとめることはこのサイト https://nextat.co.jp/staff/archives/279
 //間にmiddleware('auth')を挟むと認証済みかどうかも組み込める

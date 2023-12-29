@@ -35,4 +35,5 @@ class FavoriteController extends Controller
             'categories' => $category->get()
             ]);
     }
+    
 }
