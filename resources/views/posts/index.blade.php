@@ -84,7 +84,7 @@
                                     <p>フォロワー数：{{$post->follow_count($post)}}</p>
                                     </br>
                                     <!-- フォロー機能ここから -->
-                                    <span>
+                                    <div>
                                         @if($post->user_id !== Auth::user()->id )
                                             @if( $post->is_followed($post) )
                                             	<a href = "{{ route('unfollow', $post->user_id) }}" class="btn btn-success btn-sm">
@@ -96,9 +96,13 @@
                                             	</a>
                                             @endif
                                         @endif
-                                        
-                                        </span>
+                                    </div>
+                                    
+                                    <p>
+                                        {{ $post->created_at->toDateString() }}
+                                    </p>
                                 </div>
+                                
                                 
                                 <!-- お気に入り機能ここから -->
                                 <!--https://biz.addisteria.com/laravel_nice_button/-->
