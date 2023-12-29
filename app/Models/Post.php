@@ -12,11 +12,6 @@ class Post extends Model
     use HasFactory;
     use SoftDeletes;
     
-    
-    public function getPaginate($limit=3){
-        return $this->orderBy('updated_at','desc')->paginate($limit);
-    }
-    
     public function category(){
         return $this -> belongsTo(Category::class);
     }
@@ -36,6 +31,8 @@ class Post extends Model
     public function tags(){
         return $this -> belongsToMany(Tag::class);
     }
+    
+    private $paginate=3;
     
     public static function search($keyword, $categoryId,$tagsId, $pagination)
     {
@@ -70,7 +67,7 @@ class Post extends Model
     
     //お気に入り数の多い投稿順に取得
     public function favorite_rank(){
-        $post = $this->withcount('favorites')->orderBy('favorites_count','desc')->paginate(3);
+        $post = $this->withcount('favorites')->orderBy('favorites_count','desc')->paginate($this->paginate);
         
         return $post;
     }
