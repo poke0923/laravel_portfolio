@@ -65,6 +65,11 @@ class Post extends Model
         return $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
     }
     
+    //
+    public function favorite_posts(){
+        return \Auth::user() -> favorite_posts() -> orderBy( 'updated_at', 'desc' ) -> paginate(3);
+    }
+    
     //お気に入り数の多い投稿順に取得
     public function favorite_rank(){
         $post = $this->withcount('favorites')->orderBy('favorites_count','desc')->paginate($this->paginate);

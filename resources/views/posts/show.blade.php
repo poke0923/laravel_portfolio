@@ -40,9 +40,37 @@
           <h3 class=body>{{$post->body}}</h3>
                         
           <h3 class=category>{{$post->category->name}}</h3>
+          @foreach($post->post_tags($post) as $tag)
+              <a href="/tags/{{$tag->id}}">
+                  <p>{{$tag->name}}</p>
+              </a>
+          @endforeach
           <div class="flex justify-end mt-4">
-            <p class=user>投稿者：{{$post->user->name}}</p>
+            <a href={{ route('profile',$post->user_id) }}><p class=user>投稿者：{{$post->user->name}}</p></a>
+            </br>
+            <p>フォロワー数：{{$post->follow_count($post)}}</p>
+            </br>
+            <!-- フォロー機能ここから -->
+            <div>
+                @if($post->user_id !== Auth::user()->id )
+                    @if( $post->is_followed($post) )
+                    	<a href = "{{ route('unfollow', $post->user_id) }}" class="btn btn-success btn-sm">
+                    		フォロー解除
+                    	</a>
+                    @else
+                    	<a href = "{{ route('follow', $post->user_id) }}" class="btn btn-secondary btn-sm">
+                    		フォローする
+                    	</a>
+                    @endif
+                @endif
+                
+            </div>
+            
+            <p>
+              投稿日：{{ $post->created_at->toDateString() }}
+            </p>
           </div>
+          
                         
           <span>  
             <!-- もし$favoriteがあれば＝ユーザーが「いいね」をしていたら -->
@@ -66,7 +94,7 @@
             @endif
           </span>
                         
-          <a href="/">back</a>
+          <a href="{{url()->previous()}}">back</a>
           
           <div id="map" style="height:500px; width:800px;"></div>
           
