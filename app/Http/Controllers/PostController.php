@@ -15,13 +15,12 @@ class PostController extends Controller
     //投稿一覧表示
     public function index(Request $request, Post $post, Category $category, Tag $tag){
         //Requestのパラメータを取得
-        
+        //dd($request);
         $keyword = $request->input('keyword');
         $categoryId = $request->input('category_id');
         $tagsId = $request->input('tag');
         $pagination = 3;
         
-      
         return view('posts.index')->with([
             'posts' => $post->search($keyword,$categoryId,$tagsId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
             'categories' => $category->get(),
@@ -32,7 +31,7 @@ class PostController extends Controller
     //投稿詳細表示
     public function show(Post $post){
         
-        $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
+        $favorite = Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
         
         return view('posts.show', compact('favorite'))->with(['post'=>$post]);
     }
@@ -57,7 +56,7 @@ class PostController extends Controller
         $image = $request->file('image');
        
         // バケットの`myprefix`フォルダへアップロード
-        $path = Storage::disk('s3')->putFile('/', $image,'public');
+        $path = Storage::disk('s3')->putFile('/', $image);
         
         // アップロードした画像のフルパスを取得
         $post->image_path = Storage::disk('s3')->url($path);

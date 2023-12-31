@@ -34,7 +34,7 @@ class Post extends Model
     
     private $paginate=3;
     
-    public static function search($keyword, $categoryId,$tagsId, $pagination)
+    public function search($keyword, $categoryId,$tagsId, $pagination)
     {
         //投稿データを全件取得
         $query = self::query();
@@ -71,12 +71,12 @@ class Post extends Model
     }
     
     //お気に入り数の多い投稿順に取得
-    public function favorite_rank(){
+    /*public function favorite_rank(){
         $post = $this->withcount('favorites')->orderBy('favorites_count','desc')->paginate($this->paginate);
         
         return $post;
     }
-    
+    */
     
     //投稿ごとのタグ取得
     public function post_tags($post){
