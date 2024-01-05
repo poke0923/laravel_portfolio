@@ -20,11 +20,14 @@ class PostController extends Controller
         $categoryId = $request->input('category_id');
         $tagsId = $request->input('tag');
         $pagination = 3;
+        $header = $post->inRandomOrder()->first();
         
-        return view('posts.index')->with([
+        return view('posts.index', compact('header') )->with([
             'posts' => $post->search($keyword,$categoryId,$tagsId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
             'categories' => $category->get(),
-            'tags' => $tag->get(),
+            'tags_spot' => $tag->where('group','spot')->get(),
+            'tags_nature' => $tag->where('group','nature')->get(),
+            'tags_animal' => $tag->where('group','animal')->get(),
         ]);
     }
     
@@ -40,7 +43,9 @@ class PostController extends Controller
     public function create(Category $category, Tag $tag){
         return view('posts.create')->with([
             'categories' => $category->get(),
-            'tags' => $tag->get(),
+            'tags_spot' => $tag->where('group','spot')->get(),
+            'tags_nature' => $tag->where('group','nature')->get(),
+            'tags_animal' => $tag->where('group','animal')->get(),
         ]);
     }
     
@@ -51,7 +56,6 @@ class PostController extends Controller
         //https://newmonz.jp/lesson/laravel-basic/chapter-8
         //このサイトのユーザーid保存の項目の1行を追加。
         
-       
         //s3アップロード開始
         $image = $request->file('image');
        
@@ -81,24 +85,30 @@ class PostController extends Controller
         return view('posts.edit')->with([
             'post' => $post,
             'categories' => $category->get(),
-            'tags' => $tag->get(),
+            'tags_spot' => $tag->where('group','spot')->get(),
+            'tags_nature' => $tag->where('group','nature')->get(),
+            'tags_animal' => $tag->where('group','animal')->get(),
         ]);
     }
     
     //投稿編集保存
     public function update(PostRequest $request,Post $post){
-         //s3アップロード開始
-        $image = $request->file('image');
-       
-        // バケットの`myprefix`フォルダへアップロード
-        $path = Storage::disk('s3')->putFile('/', $image,'public');
+        if($request->file('image') !== null){
+            //s3アップロード開始
+            $image = $request->file('image');
+            
+            // バケットのフォルダへアップロード
+            $path = Storage::disk('s3')->putFile('/', $image);
+            
+            // アップロードした画像のフルパスを取得
+            $post->image_path = Storage::disk('s3')->url($path);
+        }
         
-        // アップロードした画像のフルパスを取得
-        $post->image_path = Storage::disk('s3')->url($path);
         $post->update($request['post']);
         $postTag = $request['tag'];
         $post->tags()->sync($postTag);
         return redirect('/posts/'.$post->id);
+        
     }
     
     //投稿削除

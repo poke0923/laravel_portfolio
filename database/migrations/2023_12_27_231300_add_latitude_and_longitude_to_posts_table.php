@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             //
-            $table->double('latitude',9,7);
-            $table->double('longitude',10,7);
+            $table->double('latitude',9,7)->nullable();
+            $table->double('longitude',10,7)->nullable();
         });
     }
 

@@ -55,7 +55,7 @@ class Post extends Model
             });
         }
         
-        return $query->orderBy('updated_at', 'desc')->paginate($pagination);
+        return $query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->paginate($pagination);
     }
     
     //その投稿のお気に入り状態の判別 https://qiita.com/phper_sugiyama/items/9a4088d1ca816a7e3f29
