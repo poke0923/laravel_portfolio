@@ -23,19 +23,20 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
+        
  
-    return [
-        //post[title]などで指定した入れ子の構造は「.（ドット）」で繋いで取り出す
-        'post.title' => 'required',
-        'post.body' => 'required|min:10',
-    ];
+        return [
+            //post[title]などで指定した入れ子の構造は「.（ドット）」で繋いで取り出す
+            'post.title' => 'required',
+            'image'=>'required',
+        ];
     }
     
     public function attributes()
     {
     return [
         'post.title' => '投稿タイトル',
-        'post.body' => '写真説明'
+        'image' => '写真'
     ];
     }
 }

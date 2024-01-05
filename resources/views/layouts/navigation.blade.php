@@ -1,12 +1,15 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-100 w-full z-10 fixed">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('index') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="{{ route('index') }}" class="inline-flex items-center tracking-widest">
+                        <p class="title-font font-medium  text-gray-900 text-lg">P</p>
+                        <p class=" text-gray-500 text-sm">hot</p>
+                        <p class="title-font font-medium  text-gray-900 text-lg">P</p>
+                        <p class=" text-gray-500 text-sm">lace</p>
                     </a>
                     
                 </div>
@@ -14,16 +17,12 @@
                 <!-- Navigation Links -->
                 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
-                        {{ __('投稿一覧') }}
+                    <x-nav-link :href="route('index')" class=" text-gray-500 text-sm">
+                        {{ __('最新の投稿') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('index_favorites')" :active="request()->routeIs('index_favorites')">
-                        {{ __('お気に入り一覧') }}
+                    <x-nav-link :href="route('create')" class=" text-gray-500 text-sm sm:ml-auto">
+                        {{ __('投稿する') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('index_follows')" :active="request()->routeIs('index_follows')">
-                        {{ __('フォロー中のユーザーの投稿') }}
-                    </x-nav-link>
-                   
                 </div>
             </div>
 
@@ -45,6 +44,12 @@
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('index_favorites')" :active="request()->routeIs('index_favorites')">
+                            {{ __('お気に入り一覧') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('index_follows')" :active="request()->routeIs('index_follows')">
+                            {{ __('フォローユーザーの投稿') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -76,8 +81,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('index')" :active="request()->routeIs('index')">
+                {{ __('最新の投稿') }}
             </x-responsive-nav-link>
         </div>
 
@@ -89,8 +94,14 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('profile.edit')" class="hover:bg-white">
                     {{ __('Profile') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('index_favorites')" :active="request()->routeIs('index_favorites')">
+                    {{ __('お気に入り一覧') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('index_follows')" :active="request()->routeIs('index_follows')">
+                    {{ __('フォローユーザーの投稿') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

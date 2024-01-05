@@ -37,7 +37,7 @@
         <div class="p-6 text-gray-900">
           <h2 class=title>{{$post->title}}</h2>
                         
-          <h3 class=body>{{$post->body}}</h3>
+          <h3 class="whitespace-pre-wrap">{{$post->body}}</h3>
                         
           <h3 class=category>{{$post->category->name}}</h3>
           @foreach($post->post_tags($post) as $tag)

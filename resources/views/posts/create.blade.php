@@ -11,6 +11,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+        @vite('resources/css/app.css')
 
         <title>Laravel</title>
         <style>
@@ -24,6 +27,12 @@
     </head>
     
     <body>
+      <script type="text/javascript">
+            
+            $(document).ready(function() {
+                $('.js-example-basic-multiple').select2();
+            });
+      </script>
        <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -40,7 +49,7 @@
                             -->
                             
                             <h2>写真説明</h2>
-                            <textarea name="post[body]">{{ old('post.body') }}</textarea>
+                            <textarea name="post[body]" class="whitespace-pre-wrap">{{ old('post.body') }}</textarea>
                             <p class="error">{{$errors->first('post.body')}}</p>
                             <!--
                             バリデーションのエラーメッセージのattributeはリクエストクラス（PostRequest）で指定できる
@@ -53,9 +62,38 @@
                             </select>
                             
                             <h2>タグ</h2>
-                            @foreach($tags as $tag)
-                                <input type="checkbox" name="tag[]" value="{{$tag->id}}"><label>{{$tag->name}}</label>
-                            @endforeach
+                            <div class="grid gap-1 grid-cols-3 p-3">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
+                                        場所:
+                                    </label>
+                                    <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
+                                        @foreach($tags_spot as $tag)
+                                            <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
+                                        自然:
+                                    </label>
+                                    <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
+                                        @foreach($tags_nature as $tag)
+                                            <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
+                                        動物:
+                                    </label>
+                                    <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
+                                        @foreach($tags_animal as $tag)
+                                            <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             
                             <h2>撮影場所</h2>
                             <input
@@ -69,6 +107,7 @@
                             <div>lng: <input id="lng" name="post[longitude]" type="text"/></div>
                             
                             <input type="file" name="image" onchange="previewImage(this);">
+                            <p class="error">{{$errors->first('image')}}</p>
                             <p>
                             Preview:<br>
                             <img id="preview" src="" style="max-width:200px;">
@@ -131,19 +170,13 @@
                   return;
                 }
           
-                const icon = {
-                  url: place.icon,
-                  size: new google.maps.Size(71, 71),
-                  origin: new google.maps.Point(0, 0),
-                  anchor: new google.maps.Point(17, 34),
-                  scaledSize: new google.maps.Size(25, 25),
-                };
+                const mapicon = google.maps.importLibrary("marker");
           
                 // Create a marker for each place.
                 markers.push(
                   new google.maps.Marker({
                     map,
-                    icon,
+                    icon:mapicon,
                     title: place.name,
                     position: place.geometry.location,
                   }),
@@ -154,10 +187,9 @@
                   // Only geocodes have viewport.
                   bounds.union(place.geometry.viewport);
                 } else {
-                  console.log(place.geometry.location);
                   bounds.extend(place.geometry.location);
                 }
-                console.log(place.geometry.location);
+                
                 document.getElementById("lat").value = place.geometry.location.lat();
                 document.getElementById("lng").value = place.geometry.location.lng();
                 
