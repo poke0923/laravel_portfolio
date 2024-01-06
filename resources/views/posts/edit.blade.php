@@ -36,111 +36,128 @@
       
       </script>
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
-                        <form action="/posts/{{$post->id}}/edit" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                            <h2>投稿タイトル</h2>
-                            <input type="text" name="post[title]" value="{{ old('post.title',$post->title) }}">
-                            <p class="error">{{$errors->first('post.title')}}</p>
-                            <!--
-                            nameで指定した入れ子の構造（post[title]）は
-                            それ以降は「.（ドット）」で繋いで取り出すことができる
-                            -->
-                            <h2>写真</h2>
-                            <p>現在の画像</p>
-                            <img src="{{ $post->image_path }}" style="max-width:200px;">
-                            <p>⇒</p>
-                            <h2>変更後の画像</h2>
-                            <input type="file" name="image" onchange="previewImage(this);">
-                            <p>
-                            Preview:<br>
-                            <img id="preview" src="" style="max-width:200px;">
-                            </p>
-                            
-                            <h2>写真説明</h2>
-                            <textarea name="post[body]">{{ old('post.body',$post->body) }}</textarea>
-                            <p class="error">{{$errors->first('post.body')}}</p>
-                            
-                            <h2>カテゴリー</h2>
-                            <select id="category" name="post[category_id]">
-                               
-                                @foreach($categories as $category)
-                                    <option value="{{$category->id}}" {{ $category->id === $post->category_id ? "selected":"" }}>{{$category->name}}</option>
-                                @endforeach
-                                
-                            </select>
-                            
-                            <h2>tag</h2>
-                            
-                              <div class="grid gap-1 grid-cols-3 p-3">
-                                  <div class="mb-4">
-                                      <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
-                                          場所:
-                                      </label>
-                                      <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
-                                          @foreach($tags_spot as $tag)
-                                              <option value="{{$tag->id}}" {{ in_array($tag->id, $post->tags->pluck('id')->toArray()) ? "selected":"" }}>{{$tag->name}}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                                  <div class="mb-4">
-                                      <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
-                                          自然:
-                                      </label>
-                                      <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
-                                          @foreach($tags_nature as $tag)
-                                              <option value="{{$tag->id}}" {{ in_array($tag->id, $post->tags->pluck('id')->toArray()) ? "selected":"" }}>{{$tag->name}}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                                  <div class="mb-4">
-                                      <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
-                                          動物:
-                                      </label>
-                                      <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
-                                          @foreach($tags_animal as $tag)
-                                              <option value="{{$tag->id}}" {{ in_array($tag->id, $post->tags->pluck('id')->toArray()) ? "selected":"" }}>{{$tag->name}}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              </div>
-                            
-                            
-                            
-                            <h2>撮影場所</h2>
-                            <input
-                                id="pac-input"
-                                class="controls"
-                                type="text"
-                                placeholder="Search Box"
-                              />
-                            <div id="map" style="height:500px; width:800px;"></div>
-                            <div>lat: <input id="lat" name="post[latitude]" type="text" value="{{$post->latitude}}"></div>
-                            <div>lng: <input id="lng" name="post[longitude]" type="text" value="{{$post->longitude}}"></div>
-                            </br>
-                            <x-primary-button class="mt-3">
-                                {{ __('保存') }}
-                            </x-primary-button>
-                            
-                        </form>
+          <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+              <div class="p-6 text-gray-600 font-medium">
+                <form action="/posts/{{$post->id}}/edit" method="POST" enctype="multipart/form-data">
+                  @csrf
+                  @method('PUT')
+                  <div class="flex flex-col sm:flex sm:flex-row">
+                    <section class="w-full sm:w-1/3">
+                      <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">投稿タイトル</h2>
+                      <input type="text" name="post[title]" value="{{ old('post.title',$post->title) }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-100 border-0">
+                      <p class="error">{{$errors->first('post.title')}}</p>
+                        <!--
+                        nameで指定した入れ子の構造（post[title]）は
+                        それ以降は「.（ドット）」で繋いで取り出すことができる
+                        -->
+                      <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真説明</h2>
+                      <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-100 border-0">{{ old('post.body',$post->body) }}</textarea>
+                      <p class="error">{{$errors->first('post.body')}}</p>
+                      <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">カテゴリー</h2>
+                      <select id="category" name="post[category_id]" class="rounded-lg border-0">
+                          @foreach($categories as $category)
+                              <option value="{{$category->id}}" {{ $category->id === $post->category_id ? "selected":"" }}>{{$category->name}}</option>
+                          @endforeach
+                      </select>
+                    </section>
+                    <section class="w-full mt-4 sm:mt-0 sm:w-2/3 flex flex-col items-center justify-center">
+                      <h2 class="sm:hidden underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真選択</h2>
+                      <div class="flex flex-col sm:flex sm:flex-row items-center space-x-8">
+                        <div>
+                          <h2 class="invisible sm:visible underline underline-offset-4 decoration-orange-700 mb-2">画像変更</h2>
+                          <img src="{{ $post->image_path }}" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
+                        </div>
                         
-                        <a href="/">back</a>
-                     </div>
-                </div>
+                          <div class="invisible sm:visible ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                            </svg>
+                          </div>
+                          <div class="sm:hidden mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                            </svg>
+  
+                          </div>
+                        <div class="flex flex-col justify-center items-center ">
+                          <img id="preview" src="" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
+                          <input type="file" name="image" onchange="previewImage(this);">
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <h2 class="underline underline-offset-4 decoration-orange-700 mt-4">タグ</h2>
+                  <div class="grid gap-1 grid-cols-3 p-3">
+                    <div class="mb-4">
+                      <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
+                          場所:
+                      </label>
+                      <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
+                        @foreach($tags_spot as $tag)
+                          <option value="{{$tag->id}}" {{ in_array($tag->id, $post->tags->pluck('id')->toArray()) ? "selected":"" }}>{{$tag->name}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="mb-4">
+                      <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
+                          自然:
+                      </label>
+                      <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
+                        @foreach($tags_nature as $tag)
+                          <option value="{{$tag->id}}" {{ in_array($tag->id, $post->tags->pluck('id')->toArray()) ? "selected":"" }}>{{$tag->name}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="mb-4">
+                      <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
+                        動物:
+                      </label>
+                      <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
+                        @foreach($tags_animal as $tag)
+                            <option value="{{$tag->id}}" {{ in_array($tag->id, $post->tags->pluck('id')->toArray()) ? "selected":"" }}>{{$tag->name}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+                  <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">撮影場所</h2>
+                    <div class="rounded-lg h-96 overflow-hidden">
+                      <input
+                          id="pac-input"
+                          class="controls"
+                          type="text"
+                          placeholder="Search Box"
+                        />
+                      <div id="map" class="object-cover object-center h-full w-full"></div>
+                    </div>
+                    <div class="flex flex-col justify-start sm:flex sm:flex-row mt-2">
+                      <div>lat: <input id="lat" name="post[latitude]" type="text" class="rounded-lg bg-gray-100 border-0" value="{{$post->latitude}}"></div>
+                      <div class="mt-2 sm:mt-0 sm:ml-2">lng: <input id="lng" name="post[longitude]" type="text" class="rounded-lg bg-gray-100 border-0" value="{{$post->longitude}}"></div>
+                    </div>
+                    <div class="flex justify-between">
+                      <div>
+                        <a href="{{url()->previous()}}" class="text-indigo-500 inline-flex items-center mt-6">back</a>
+                      </div>
+                      <div>
+                        <input type="submit" class="lg:mr-6 mt-2 bg-gray-800 hover:bg-gray-700 text-white text-md rounded px-4 py-2" value="保存">
+                      </div>
+                    </div>
+                      
+                </form>
+              </div>          
             </div>
+          </div>
         </div>
         <script src="https://maps.googleapis.com/maps/api/js?key={{config('services.googleMap.apikey')}}&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
 
         <script>
           function initAutocomplete($post) {
             const map = new google.maps.Map(document.getElementById("map"), {
-              center: { lat: {{$post->latitude === null ? 35.6812362: $post->latitude }}, lng: {{$post->longitude == null ? 139.7671248:$post->longitude}} },
+              center: { lat: {{$post->latitude === null ? 35.6812362: $post->latitude }}, lng: {{$post->longitude === null ? 139.7671248:$post->longitude}} },
               zoom: 13,
               mapTypeId: "roadmap",
             });
+            
             
             // Create the search box and link it to the UI element.
             const input = document.getElementById("pac-input");

@@ -28,8 +28,9 @@ class FavoriteController extends Controller
     
     //お気に入りした投稿一覧取得　https://newmonz.jp/lesson/laravel-basic/chapter-9　「ブックマークした記事一覧を取得」を参考
     public function favorite_posts(Post $post,Category $category){
+        $header = $post->inRandomOrder()->first();
     
-        return view('favorites.index')->with([
+        return view('favorites.index',compact('header'))->with([
             'posts' => $post->favorite_posts(),
             'categories' => $category->get()
             ]);

@@ -1,121 +1,130 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{$tag->name}}の投稿一覧
-        </h2>
-    <!--navigation.blade.phpからナビゲーションバーの項目を追加できる-->
-    </x-slot>
+    
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+        @vite('resources/css/app.css')
+       
 
         <title>Laravel</title>
 
-        
-        
-        <style>
-            
-            div.post{
-                padding: 10px;
-                margin: 10px;
-                border: 1px solid gray;
-                border-radius: 10px;
-            }
-            
-        </style>
 
     </head>
     
     <body>
+        
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                $('.js-example-basic-multiple').select2();
+            });
+        </script>
+        
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        
-                        <!-- 検索機能ここから -->
-                        <div>
-                            <form acrion="{{ route('index') }}" method="GET">
-                                @csrf
-                                <input type="text" name="keyword">
-                                <select name="category_id">
-                                    <option value="0">すべて</option>
-                                @foreach($categories as $category)
-                                    <option value="{{$category->id}}">{{$category->name}}</option>
-                                @endforeach
-                                </select>
-                                <input type="submit" value="検索">
-                            </form>
+                        <div class="relative">
+                            <div class="absolute p-6">テスト</div> 
+                            <img src="{{ $header->image_path }}" class="h-48 w-full overflow-hidden object-cover">
+                            
                         </div>
-                        <!-- 新規投稿機能ここから -->
-                        <x-primary-button class="ml-3 mt-6">
-                            <a href="{{ route('create') }}" class="newPost">新しい投稿を作成</a>
-                        </x-primary-button>
                         
                         <!-- 投稿一覧表示ここから -->
-                        @foreach($posts as $post)
-                            <div class="post">
-                                <a href="/posts/{{$post->id}}">
-                                    <h2 class=title>{{$post->title}}</h2>
-                                </a>
-                                    <h3 class=body>{{$post->body}}</h3>
-                                <a href="/categories/{{$post->category->id}}">
-                                    <h4>{{$post->category->name}}</h4>
-                                </a>
-                                @foreach($post->post_tags($post) as $tag)
-                                    <a href="/tags/{{$tag->id}}">
-                                        <p>{{$tag->name}}</p>
-                                    </a>
-                                @endforeach
-                                <div class="flex justify-end mt-4">
-                                    <p class=user>投稿者：{{$post->user->name}}</p>
+                        <section class="text-gray-600 body-font">
+                            <div class="container px-2 py-24 mx-auto">
+                                <div class="flex flex-wrap -m-4">
+                                    @foreach($posts as $post)
+                                        <div class="p-1 w-1/3">
+                                            <div class="bg-white h-full sm:border-1 sm:border-gray-200 sm:border-opacity-60 sm:rounded-lg overflow-hidden">
+                                                <!-- 写真 -->
+                                                <img src="{{ $post->image_path }}" class="lg:h-48 md:h-36 h-24 w-full object-cover object-center">
+                                                
+                                                <div class="hidden md:inline-block md:w-full md:px-6 md:py-3">
+                                                    <div class="flex items-center flex-wrap ">
+                                                        <!-- カテゴリー -->
+                                                        <a href="/categories/{{$post->category->id}}" class="hover:underline inline-flex items-center tracking-widest text-sm title-font font-medium text-gray-400 mb-1">
+                                                            {{ $post->category->id == 1 ? "": $post->category->name }}
+                                                        </a>
+                                                        <!-- 投稿者 -->
+                                                        <div class="flex ml-auto">
+                                                            <a href={{ route('profile',$post->user_id) }} class="ml-auto leading-none title-font font-medium text-sm rounded mb-2">
+                                                                投稿者：{{$post->user->name}}
+                                                            </a>
+                                                            @if($post->user_id == Auth::user()->id)
+                                                                <div class="relative group ">
+                                                                    <div>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" h-4 ">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div class="absolute invisible group-hover:visible bg-white rounded-lg text-right text-xs right-2 p-3">
+                                                                        <a href="/posts/{{$post->id}}/edit" class="hover:bg-gray-200 hover:rounded-sm">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hover:bg-gray-300 w-3 h-3 mb-1">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                                                            </svg>
+                                                                        </a>
+                                                                        <form id="{{$post->id}}" action="/posts/{{$post->id}}/delete" method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            
+                                                                            <button type="button" onclick="deletePost({{$post->id}})" class="">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="hover:bg-gray-300 w-3 h-3">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                                                </svg>
+                                                                            </button>
+                                                                            <!--deletePost({{$post->id}})で投稿のidを持った状態でjavascriptの関数が動く-->
+                                                                            
+                                                                        </form>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <!-- 投稿タイトル -->
+                                                    <a href="/posts/{{$post->id}}">
+                                                        <h1 class="title-font text-md font-medium text-gray-900 mb-3">{{$post->title}}</h1>
+                                                    </a>
+                                                    <div class="flex items-center flex-wrap">
+                                                        <!-- 投稿に紐づくタグ -->
+                                                        @foreach($post->post_tags($post) as $tag)
+                                                            <a href="/tags/{{$tag->id}}" class="text-gray-500 text-xs hover:underline inline-flex items-center mr-2">
+                                                                {{$tag->name}}
+                                                            </a>
+                                                        @endforeach
+                                                        <!-- お気に入り機能ここから -->
+                                                        <!--https://biz.addisteria.com/laravel_nice_button/-->
+                                                        
+                                                        <!-- もしユーザーが「いいね」をしていたら -->
+                                                        @if( $post -> is_favorited($post) )
+                                                        <!-- 「いいね」取消用ボタンを表示 -->
+                                                        	<a href="{{ route('unfavorite', $post) }}" class="ml-auto leading-none bg-red-500 hover:bg-red-400 text-white text-xs rounded px-3 py-2">
+                                                        		♥ {{ $post->favorites->count() }}
+                                                        	</a>
+                                                        @else
+                                                        <!-- まだユーザーが「いいね」をしていなければ、「いいね」ボタンを表示 -->
+                                                        	<a href="{{ route('favorite', $post) }}" class="ml-auto leading-none bg-gray-500 hover:bg-gray-400 text-white text-xs rounded px-3 py-2">
+                                                        		♡ {{ $post->favorites->count() }}
+                                                        		
+                                                        	</a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                
-                                <!-- お気に入り機能ここから -->
-                                <!--https://biz.addisteria.com/laravel_nice_button/-->
-                                <span>
-                                    <!-- もし$favoriteがあれば＝ユーザーが「いいね」をしていたら -->
-                                    @if( $post -> is_favorited($post) )
-                                    
-                                    <!-- 「いいね」取消用ボタンを表示 -->
-                                    	<a href="{{ route('unfavorite', $post) }}" class="btn btn-success btn-sm">
-                                    		いいね取り消し
-                                    		<!-- 「いいね」の数を表示 -->
-                                    		<span class="badge">
-                                    			{{ $post->favorites->count() }}
-                                    		</span>
-                                    	</a>
-                                    @else
-                                    <!-- まだユーザーが「いいね」をしていなければ、「いいね」ボタンを表示 -->
-                                    	<a href="{{ route('favorite', $post) }}" class="btn btn-secondary btn-sm">
-                                    		いいね
-                                    		<!-- 「いいね」の数を表示 -->
-                                    		<span class="badge">
-                                    			{{ $post->favorites->count() }}
-                                    		</span>
-                                    	</a>
-                                    @endif
-                                </span>
-                                
-                                </br>
-                                <a href="/posts/{{$post->id}}/edit">編集</a>
-                                
-                                <form id="{{$post->id}}" action="/posts/{{$post->id}}/delete" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    
-                                    <button type="button" onclick="deletePost({{$post->id}})" class="mt-4">削除</button>
-                                    <!--deletePost({{$post->id}})で投稿のidを持った状態でjavascriptの関数が動く-->
-                                    
-                                </form>
                             </div>
-                        @endforeach
-                            
+                        </section>
+  
        
-        
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
          

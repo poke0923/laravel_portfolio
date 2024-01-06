@@ -15,7 +15,7 @@ class PostController extends Controller
     //投稿一覧表示
     public function index(Request $request, Post $post, Category $category, Tag $tag){
         //Requestのパラメータを取得
-        //dd($request);
+        
         $keyword = $request->input('keyword');
         $categoryId = $request->input('category_id');
         $tagsId = $request->input('tag');
@@ -24,6 +24,15 @@ class PostController extends Controller
         
         return view('posts.index', compact('header') )->with([
             'posts' => $post->search($keyword,$categoryId,$tagsId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
+            'categories' => $category->get(),
+            'tags_spot' => $tag->where('group','spot')->get(),
+            'tags_nature' => $tag->where('group','nature')->get(),
+            'tags_animal' => $tag->where('group','animal')->get(),
+        ]);
+    }
+    
+    public function serch(Category $category, Tag $tag){
+        return view('posts.serch')->with([
             'categories' => $category->get(),
             'tags_spot' => $tag->where('group','spot')->get(),
             'tags_nature' => $tag->where('group','nature')->get(),
@@ -120,7 +129,8 @@ class PostController extends Controller
     
     //お気に入り数順での投稿取得
     public function favorite_rank(Post $post,Category  $category){
-        return view('favorites.rank')->with([
+        $header = $post->inRandomOrder()->first();
+        return view('favorites.rank',compact('header'))->with([
             'posts' => $post->favorite_rank(),
             'categories' => $category->get(),
             ]);

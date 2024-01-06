@@ -28,19 +28,31 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="p-6 text-gray-900">
                         <div class="relative">
-                            <div class="absolute p-6">テスト</div> 
-                            <img src="{{ $header->image_path }}" class="h-48 w-full overflow-hidden object-cover">
+                            <div class="absolute px-6 py-24 h-full items-center justify-center bg-white bg-opacity-50">
+                                <div class="shrink-0 flex items-center">
+                                    <div class="inline-flex items-end tracking-widest">
+                                        <p class="title-font font-medium  text-gray-900 text-6xl">P</p>
+                                        <p class=" text-gray-500 text-2xl">hoto</p>
+                                        <p class="title-font font-medium  text-gray-900 text-6xl">P</p>
+                                        <p class=" text-gray-500 text-2xl">lace</p>
+                                    </div>
+                                </div>
+                            </div> 
+                            <img src="{{ $header->image_path }}" class="h-96 w-full overflow-hidden object-cover ">
                             
                         </div>
+                        
                         <!-- 検索機能ここから -->
-                        <div class="m-4">
-                            <form acrion="{{ route('index') }}" method="GET" class="text-sm bg-gray-200 border border-gray-400 rounded px-8 pt-6 pb-8 m-4">
+                        <h1 class="mt-6 mb-3 underline underline-offset-4 decoration-orange-700 text-2xl">投稿検索</h1>
+                        <div>
+                            <form action="{{ route('index') }}" method="GET" class="text-sm bg-gray-100 border border-gray-200 rounded px-8 pt-6 pb-8 m-4">
                             @csrf
                                 <input type="text" name="keyword">
                                 <select name="category_id">
+                                    <option value="0">すべて</option>
                                     
                                     @foreach($categories as $category)
-                                        <option value="{{$category->id}}">{{ $category->id === 1 ? "すべて": $category->name }}</option>
+                                        <option value="{{$category->id}}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                                 </br>
@@ -76,23 +88,24 @@
                                         </select>
                                     </div>
                                 </div>
-                                <input type="submit" value="検索">
+                                <div class="flex justify-end">
+                                <input type="submit" class=" bg-gray-900 hover:bg-gray-800 text-white rounded px-4 py-2" value="検索">
+                                </div>
                             </form>
                         </div>
                         
-                        
-                        <!-- 新規投稿機能ここから -->
-                        <a href="{{ route('create') }}" class="bg-gray-500 hover:bg-gray-400 text-white text-xs rounded px-3 py-2">新しい投稿を作成</a>
-                        
                         <!-- 投稿一覧表示ここから -->
+                        <h1 class="mt-12 underline underline-offset-4 decoration-orange-700 text-2xl">投稿一覧</h1>
                         <section class="text-gray-600 body-font">
-                            <div class="container px-2 py-24 mx-auto">
+                            <div class="container px-2 py-12 mx-auto">
                                 <div class="flex flex-wrap -m-4">
                                     @foreach($posts as $post)
                                         <div class="p-1 w-1/3">
                                             <div class="bg-white h-full sm:border-1 sm:border-gray-200 sm:border-opacity-60 sm:rounded-lg overflow-hidden">
                                                 <!-- 写真 -->
-                                                <img src="{{ $post->image_path }}" class="lg:h-48 md:h-36 h-24 w-full object-cover object-center">
+                                                <a href="/posts/{{$post->id}}">
+                                                    <img src="{{ $post->image_path }}" class="lg:h-48 md:h-36 h-24 w-full object-cover object-center hover:scale-110 duration-700">
+                                                </a>
                                                 
                                                 <div class="hidden md:inline-block md:w-full md:px-6 md:py-3">
                                                     <div class="flex items-center flex-wrap ">
@@ -118,9 +131,19 @@
                                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                                                                             </svg>
                                                                         </a>
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="hover:bg-gray-300 w-3 h-3">
-                                                                             <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                                        </svg>
+                                                                        <form id="{{$post->id}}" action="/posts/{{$post->id}}/delete" method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            
+                                                                            <button type="button" onclick="deletePost({{$post->id}})" class="">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="hover:bg-gray-300 w-3 h-3">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                                                </svg>
+                                                                            </button>
+                                                                            <!--deletePost({{$post->id}})で投稿のidを持った状態でjavascriptの関数が動く-->
+                                                                            
+                                                                        </form>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             @endif
@@ -162,54 +185,15 @@
                                 </div>
                             </div>
                         </section>
-                                    
-                            
-                            
-                            
-                                    
-                                    
-                                    
-                                        
-                                        <!-- フォロー機能ここから -->
-                                        <div>
-                                            @if($post->user_id !== Auth::user()->id )
-                                                @if( $post->is_followed($post) )
-                                                	<a href = "{{ route('unfollow', $post->user_id) }}" class="bg-gray-500 hover:bg-gray-400 text-white text-xs rounded px-4 py-2">
-                                                		フォロー解除
-                                                	</a>
-                                                @else
-                                                	<a href = "{{ route('follow', $post->user_id) }}" class="bg-blue-700 hover:bg-blue-600 text-white text-xs rounded px-4 py-2">
-                                                		フォロー
-                                                	</a>
-                                                @endif
-                                            @endif
-                                        </div>
-                                        
-                                    </div>
-                                    <p>投稿日：{{ $post->created_at->toDateString() }}</p>
-                                    
-                                    
-                                    @if($post->user_id == Auth::user()->id)
-                                        <a href="/posts/{{$post->id}}/edit">編集</a>
-                                        
-                                        <!--削除ボタン-->
-                                        <form id="{{$post->id}}" action="/posts/{{$post->id}}/delete" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" onclick="deletePost({{$post->id}})" class="mt-4">削除</button>
-                                            <!--deletePost({{$post->id}})で投稿のidを持った状態でjavascriptの関数が動く-->
-                                        </form>
-                                    @endif
-                        
-                            
-       
+  
+                           {{$posts->appends(request()->query())->links('pagination::bootstrap-4')}}
+                             <!--https://qiita.com/wbraver/items/b95814d6383172b07a58-->
                         </div>
                     </div>
             </div>
         </div>
          
-         {{$posts->appends(request()->query())->links()}}
-         <!--https://qiita.com/wbraver/items/b95814d6383172b07a58-->
+         
          
          
          <!-- 削除機能のポップアップここから -->

@@ -30,11 +30,11 @@ class FollowController extends Controller
     public function follows_posts(Category $category, Post $post){
         $followee = Follow::where('follower_id',\Auth::user()->id)->get();
         
-        $post = $post->whereIn('user_id', $followee->pluck('followee_id')->toArray())->orderBy( 'updated_at', 'desc' )->paginate(3);
-        
+        $post_follow = $post->whereIn('user_id', $followee->pluck('followee_id')->toArray())->orderBy( 'updated_at', 'desc' )->paginate(3);
+        $header = $post->inRandomOrder()->first();
     
-        return view('posts.followees_posts_index')->with([
-            'posts' => $post,
+        return view('posts.followees_posts_index',compact('header'))->with([
+            'posts' => $post_follow,
             'categories' => $category->get()
             ]);
     }
