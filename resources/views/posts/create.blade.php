@@ -36,32 +36,46 @@
        <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
+                    <div class="p-6 text-gray-600 font-medium">
                         <form action="/posts" method="POST" enctype="multipart/form-data">
                         @csrf
-                            <h2>投稿タイトル</h2>
-                            <input type="text" name="post[title]" value="{{ old('post.title') }}">
-                            <p class="error">{{$errors->first('post.title')}}</p>
+                            <div class="flex flex-col sm:flex sm:flex-row">
+                                <div class="w-full sm:w-1/2">
+                                    <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">投稿タイトル</h2>
+                                    
+                                    <input type="text" name="post[title]" value="{{ old('post.title') }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-100 border-0">
+                                    <p class="error">{{$errors->first('post.title')}}</p>
+                                    
+                                    <!--
+                                    nameで指定した入れ子の構造（post[title]）は
+                                    それ以降は「.（ドット）」で繋いで取り出すことができる
+                                    -->
+                                    
+                                    <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真説明</h2>
+                                    <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-100 border-0">{{ old('post.body') }}</textarea>
+                                    <p class="error">{{$errors->first('post.body')}}</p>
+                                    <!--
+                                    バリデーションのエラーメッセージのattributeはリクエストクラス（PostRequest）で指定できる
+                                    -->
+                                    <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">カテゴリー</h2>
+                                    <select name="post[category_id]" class="rounded-lg border-0">
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="w-full mt-4 sm:mt-0 sm:w-1/2 flex flex-col items-center justify-center">
+                                    <h2 class="sm:hidden underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真選択</h2>
+                                    <div>
+                                        <img id="preview" src="" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
+                                    </div>
+                                    <input type="file" name="image" onchange="previewImage(this);">
+                                    <p class="error">{{$errors->first('image')}}</p>
+                                    
+                                </div>
+                            </div>
                             
-                            <!--
-                            nameで指定した入れ子の構造（post[title]）は
-                            それ以降は「.（ドット）」で繋いで取り出すことができる
-                            -->
-                            
-                            <h2>写真説明</h2>
-                            <textarea name="post[body]" class="whitespace-pre-wrap">{{ old('post.body') }}</textarea>
-                            <p class="error">{{$errors->first('post.body')}}</p>
-                            <!--
-                            バリデーションのエラーメッセージのattributeはリクエストクラス（PostRequest）で指定できる
-                            -->
-                            <h2>カテゴリー</h2>
-                            <select name="post[category_id]">
-                                @foreach($categories as $category)
-                                    <option value="{{$category->id}}">{{$category->name}}</option>
-                                @endforeach
-                            </select>
-                            
-                            <h2>タグ</h2>
+                            <h2 class="underline underline-offset-4 decoration-orange-700 mt-4">タグ</h2>
                             <div class="grid gap-1 grid-cols-3 p-3">
                                 <div class="mb-4">
                                     <label class="block text-gray-700 dark:text-gray-400 text-md font-bold mb-2" for="pair">
@@ -95,31 +109,33 @@
                                 </div>
                             </div>
                             
-                            <h2>撮影場所</h2>
-                            <input
-                                id="pac-input"
-                                class="controls"
-                                type="text"
-                                placeholder="Search Box"
-                              />
-                            <div id="map" style="height:500px; width:800px;"></div>
-                            <div>lat: <input id="lat" name="post[latitude]" type="text"/></div>
-                            <div>lng: <input id="lng" name="post[longitude]" type="text"/></div>
+                            <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">撮影場所</h2>
+                            <div class="rounded-lg h-96 overflow-hidden">
+                                <input
+                                    id="pac-input"
+                                    class="controls"
+                                    type="text"
+                                    placeholder="Search Box"
+                                  />
+                                  
+                                <div id="map" class="object-cover object-center h-full w-full"></div>
+                            </div>
+                            <div class="flex flex-col justify-start sm:flex sm:flex-row mt-2">
+                                <div>lat: <input id="lat" name="post[latitude]" type="text" class="rounded-lg bg-gray-100 border-0"></div>
+                                <div class="mt-2 sm:mt-0 sm:ml-2">lng: <input id="lng" name="post[longitude]" type="text" class="rounded-lg bg-gray-100 border-0"></div>
+                            </div>
                             
-                            <input type="file" name="image" onchange="previewImage(this);">
-                            <p class="error">{{$errors->first('image')}}</p>
-                            <p>
-                            Preview:<br>
-                            <img id="preview" src="" style="max-width:200px;">
-                            </p>
-                            </br>
-                            </br>
-                            </br>
-                            <input type="submit" value="保存">
-                            
+                            <div class="flex justify-between">
+                                <div>
+                                    <a href="{{url()->previous()}}" class="text-indigo-500 inline-flex items-center mt-6">back</a>
+                                </div>
+                                <div>
+                                    <input type="submit" class="lg:mr-6 mt-2 bg-gray-800 hover:bg-gray-700 text-white text-md rounded px-4 py-2" value="保存">
+                                </div>
+                            </div>
                         </form>
                         
-                        <a href="/">back</a>
+                        
                      </div>
                 </div>
             </div>

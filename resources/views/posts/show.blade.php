@@ -19,59 +19,75 @@
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-        }
-    </style>
-    
 </head>
 
-<body class="antialiased">
-    
-    
-  <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 text-gray-900">
-          <h2 class=title>{{$post->title}}</h2>
-                        
-          <h3 class="whitespace-pre-wrap">{{$post->body}}</h3>
-                        
-          <h3 class=category>{{$post->category->name}}</h3>
-          @foreach($post->post_tags($post) as $tag)
-              <a href="/tags/{{$tag->id}}">
-                  <p>{{$tag->name}}</p>
-              </a>
-          @endforeach
-          <div class="flex justify-end mt-4">
-            <a href={{ route('profile',$post->user_id) }}><p class=user>投稿者：{{$post->user->name}}</p></a>
-            </br>
-            <p>フォロワー数：{{$post->follow_count($post)}}</p>
-            </br>
-            <!-- フォロー機能ここから -->
-            <div>
+<body>
+  <section class="text-gray-600 body-font">
+        <div class="container px-5 py-24 mx-auto flex flex-col">
+          <div class="">
+    <div class="flex justify-center">
+        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">{{$post->title}}</h1>
+    </div>
+        <div class="flex space-x-4 justify-center pb-2">
+            <div class="">投稿日：{{ $post->created_at->toDateString() }}</div>
+            <div class="flex items-center">
+              <a href={{ route('profile',$post->user_id) }}>投稿者：{{$post->user->name}}</a>
+              <div class="inline-flex items-center ml-2">
                 @if($post->user_id !== Auth::user()->id )
                     @if( $post->is_followed($post) )
-                    	<a href = "{{ route('unfollow', $post->user_id) }}" class="btn btn-success btn-sm">
-                    		フォロー解除
+                    	<a href = "{{ route('unfollow', $post->user_id) }}" class="bg-gray-600 hover:bg-gray-500 text-white text-xs rounded px-2 py-1">
+                    		フォロー{{$post->follow_count($post)}}
                     	</a>
                     @else
-                    	<a href = "{{ route('follow', $post->user_id) }}" class="btn btn-secondary btn-sm">
-                    		フォローする
+                    	<a href = "{{ route('follow', $post->user_id) }}" class="bg-blue-600 hover:bg-blue-500 text-white text-xs rounded px-2 py-1">
+                    		フォロー{{$post->follow_count($post)}}
                     	</a>
                     @endif
                 @endif
-                
+              </div>
             </div>
             
-            <p>
-              投稿日：{{ $post->created_at->toDateString() }}
-            </p>
+            
+        </div>
+        
+              <div class="rounded-lg ">
+                <img src="{{ $post->image_path }}" class="object-cover object-center h-full w-full" >
+              </div>
+              <div class="mt-2 pt-4 text-center">
+                <p class="leading-relaxed text-lg mb-4 whitespace-pre-wrap">{{$post->body}}</p>
+              </div>
+              <div class="flex flex-col sm:flex-row mt-5">
+                <div class="sm:flex sm:flex-col inline-flex justify-center sm:w-1/3 text-center sm:pr-8 sm:py-8">
+                  <div class="flex flex-col items-center text-center justify-center">
+                    <h2 class="font-medium title-font text-gray-900 text-lg">Category</h2>
+                    <div class="w-12 h-1 bg-indigo-500 rounded mt-2 mb-4"></div>
+                    <p class="text-base hover:underline">{{$post->category->name}}</p>
+                  </div>
+                  <div class="flex flex-col sm:mt-4 items-center text-center justify-center">
+                    <h2 class="font-medium title-font text-gray-900 text-lg">Tag</h2>
+                    <div class="w-12 h-1 bg-indigo-500 rounded mt-2 mb-4"></div>
+                    <div class="flex flex-wrap text-base">
+                      @foreach($post->post_tags($post) as $tag)
+                        <a href="/tags/{{$tag->id}}" class="ml-1 hover:underline">
+                            <p>{{$tag->name}}</p>
+                        </a>
+                      @endforeach
+                    </div>
+                  </div>
+                </div>
+                <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
+                    <div class="rounded-lg h-64 overflow-hidden">
+                      <div id="map" class="object-cover object-center h-full w-full"></div>
+                    </div>
+                </div>
+              </div>
+              <a href="{{url()->previous()}}" class="text-indigo-500 inline-flex items-center">back</a>
+            </div>
           </div>
+        </section>
+        
+  <div class="font-medium">
           
-                        
           <span>  
             <!-- もし$favoriteがあれば＝ユーザーが「いいね」をしていたら -->
             @if($post->is_favorited($post))
@@ -93,16 +109,11 @@
               </a>
             @endif
           </span>
-          <img src="{{ $post->image_path }}" style="max-width:200px;">
-                        
-          <a href="{{url()->previous()}}">back</a>
+         
           
-          <div id="map" style="height:500px; width:800px;"></div>
-          
-        </div>
-      </div>
-    </div>
   </div>
+          
+      
 
   
     <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})

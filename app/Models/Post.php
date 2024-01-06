@@ -36,6 +36,7 @@ class Post extends Model
     
     public function search($keyword, $categoryId,$tagsId, $pagination)
     {
+        
         //投稿データを全件取得
         $query = self::query();
         
@@ -49,13 +50,16 @@ class Post extends Model
         if (!empty($categoryId)) {
             $query->where('category_id', 'LIKE', $categoryId);
         }
+        
         if (!empty($tagsId)) {
             $query->whereHas('tags',function($q)use($tagsId){
                 $q->whereIn('post_tag.tag_id',$tagsId);
             });
         }
+        //dd($query);
+        //dd($query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->get());
         
-        return $query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->paginate($pagination);
+        return $query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->paginate($this->paginate);
     }
     
     //その投稿のお気に入り状態の判別 https://qiita.com/phper_sugiyama/items/9a4088d1ca816a7e3f29
@@ -71,12 +75,12 @@ class Post extends Model
     }
     
     //お気に入り数の多い投稿順に取得
-    /*public function favorite_rank(){
+    public function favorite_rank(){
         $post = $this->withcount('favorites')->orderBy('favorites_count','desc')->paginate($this->paginate);
         
         return $post;
     }
-    */
+    
     
     //投稿ごとのタグ取得
     public function post_tags($post){
