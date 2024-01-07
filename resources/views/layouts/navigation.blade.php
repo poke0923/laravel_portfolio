@@ -98,6 +98,9 @@
             <x-responsive-nav-link :href="route('index')" :active="request()->routeIs('index')">
                 {{ __('最新の投稿') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('favorite_rank')" :active="request()->routeIs('favorite_rank')">
+                {{ __('人気の投稿') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('serch')" :active="request()->routeIs('serch')">
                 {{ __('詳細検索') }}
             </x-responsive-nav-link>
