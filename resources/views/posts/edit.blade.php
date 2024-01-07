@@ -39,21 +39,23 @@
           <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div class="p-6 text-gray-600 font-medium">
+                <p class="text-xl mb-4">投稿を編集</p>
                 <form action="/posts/{{$post->id}}/edit" method="POST" enctype="multipart/form-data">
                   @csrf
                   @method('PUT')
                   <div class="flex flex-col sm:flex sm:flex-row">
                     <section class="w-full sm:w-1/3">
                       <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">投稿タイトル</h2>
-                      <input type="text" name="post[title]" value="{{ old('post.title',$post->title) }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-100 border-0">
+                      <input type="text" name="post[title]" value="{{ old('post.title',$post->title) }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-200 border-0">
                       <p class="error">{{$errors->first('post.title')}}</p>
                         <!--
                         nameで指定した入れ子の構造（post[title]）は
                         それ以降は「.（ドット）」で繋いで取り出すことができる
                         -->
                       <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真説明</h2>
-                      <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-100 border-0">{{ old('post.body',$post->body) }}</textarea>
-                      <p class="error">{{$errors->first('post.body')}}</p>
+                      <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-200 border-0">{{ old('post.body',$post->body) }}</textarea>
+                      
+                      
                       <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">カテゴリー</h2>
                       <select id="category" name="post[category_id]" class="rounded-lg border-0">
                           @foreach($categories as $category)
@@ -61,6 +63,7 @@
                           @endforeach
                       </select>
                     </section>
+                    
                     <section class="w-full mt-4 sm:mt-0 sm:w-2/3 flex flex-col items-center justify-center">
                       <h2 class="sm:hidden underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真選択</h2>
                       <div class="flex flex-col sm:flex sm:flex-row items-center space-x-8">
@@ -78,7 +81,6 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
                             </svg>
-  
                           </div>
                         <div class="flex flex-col justify-center items-center ">
                           <img id="preview" src="" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
@@ -87,6 +89,7 @@
                       </div>
                     </section>
                   </div>
+                  
                   <h2 class="underline underline-offset-4 decoration-orange-700 mt-4">タグ</h2>
                   <div class="grid gap-1 grid-cols-3 p-3">
                     <div class="mb-4">

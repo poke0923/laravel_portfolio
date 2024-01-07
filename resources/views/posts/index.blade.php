@@ -27,6 +27,7 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="p-6 text-gray-900">
+                        @if($header!==null)
                         <div class="relative">
                             <div class="absolute px-6 py-24 h-full items-center justify-center bg-white bg-opacity-50">
                                 <div class="shrink-0 flex items-center">
@@ -38,9 +39,9 @@
                                     </div>
                                 </div>
                             </div> 
-                            <img src="{{ $header->image_path }}" class="h-96 w-full overflow-hidden object-cover ">
-                            
+                            <img src="{{ $header->image_path }}" class="h-80 w-full overflow-hidden object-cover ">
                         </div>
+                        @endif
                         
                         <!-- 検索機能ここから -->
                         <h1 class="mt-6 mb-3 underline underline-offset-4 decoration-orange-700 text-2xl">投稿検索</h1>
@@ -98,6 +99,9 @@
                         <h1 class="mt-12 underline underline-offset-4 decoration-orange-700 text-2xl">投稿一覧</h1>
                         <section class="text-gray-600 body-font">
                             <div class="container px-2 py-12 mx-auto">
+                                @if( $posts->isEmpty())
+                                <div>条件に当てはまる投稿がありません</div>
+                                @else
                                 <div class="flex flex-wrap -m-4">
                                     @foreach($posts as $post)
                                         <div class="p-1 w-1/3">
@@ -183,10 +187,11 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                @endif
                             </div>
                         </section>
   
-                           {{$posts->appends(request()->query())->links('pagination::bootstrap-4')}}
+                           {{$posts->appends(request()->query())->links('vendor.pagination.tailwind')}}
                              <!--https://qiita.com/wbraver/items/b95814d6383172b07a58-->
                         </div>
                     </div>

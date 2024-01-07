@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Http\Requests\EditRequest;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Favorite;
@@ -19,7 +20,7 @@ class PostController extends Controller
         $keyword = $request->input('keyword');
         $categoryId = $request->input('category_id');
         $tagsId = $request->input('tag');
-        $pagination = 3;
+        $pagination = 9;
         $header = $post->inRandomOrder()->first();
         
         return view('posts.index', compact('header') )->with([
@@ -101,7 +102,8 @@ class PostController extends Controller
     }
     
     //投稿編集保存
-    public function update(PostRequest $request,Post $post){
+    public function update(EditRequest $request,Post $post){
+       
         if($request->file('image') !== null){
             //s3アップロード開始
             $image = $request->file('image');

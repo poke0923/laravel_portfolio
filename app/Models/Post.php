@@ -32,7 +32,7 @@ class Post extends Model
         return $this -> belongsToMany(Tag::class);
     }
     
-    private $paginate=3;
+    private $paginate=6;
     
     public function search($keyword, $categoryId,$tagsId, $pagination)
     {
@@ -59,7 +59,7 @@ class Post extends Model
         //dd($query);
         //dd($query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->get());
         
-        return $query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->paginate($this->paginate);
+        return $query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->paginate($pagination);
     }
     
     //その投稿のお気に入り状態の判別 https://qiita.com/phper_sugiyama/items/9a4088d1ca816a7e3f29
@@ -71,7 +71,7 @@ class Post extends Model
     
     //
     public function favorite_posts(){
-        return \Auth::user() -> favorite_posts() -> orderBy( 'updated_at', 'desc' ) -> paginate(3);
+        return \Auth::user() -> favorite_posts() -> orderBy( 'updated_at', 'desc' ) -> paginate($this->paginate);
     }
     
     //お気に入り数の多い投稿順に取得

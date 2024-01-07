@@ -37,13 +37,14 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-600 font-medium">
+                        <p class="text-xl mb-4">新規投稿作成</p>
                         <form action="/posts" method="POST" enctype="multipart/form-data">
                         @csrf
                             <div class="flex flex-col sm:flex sm:flex-row">
                                 <div class="w-full sm:w-1/2">
                                     <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">投稿タイトル</h2>
                                     
-                                    <input type="text" name="post[title]" value="{{ old('post.title') }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-100 border-0">
+                                    <input type="text" name="post[title]" value="{{ old('post.title') }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-200 border-0">
                                     <p class="error">{{$errors->first('post.title')}}</p>
                                     
                                     <!--
@@ -52,7 +53,7 @@
                                     -->
                                     
                                     <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真説明</h2>
-                                    <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-100 border-0">{{ old('post.body') }}</textarea>
+                                    <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-200 border-0">{{ old('post.body') }}</textarea>
                                     <p class="error">{{$errors->first('post.body')}}</p>
                                     <!--
                                     バリデーションのエラーメッセージのattributeはリクエストクラス（PostRequest）で指定できる
