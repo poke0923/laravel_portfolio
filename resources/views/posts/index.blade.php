@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                             </div> 
-                            <img src="{{ $header->image_path }}" class="h-80 w-full overflow-hidden object-cover ">
+                            <img src="{{ $header->image_path }}" class="h-64 sm:h-80 w-full overflow-hidden object-cover ">
                         </div>
                         @endif
                         
@@ -108,7 +108,7 @@
                                             <div class="bg-white h-full sm:border-1 sm:border-gray-200 sm:border-opacity-60 sm:rounded-lg overflow-hidden">
                                                 <!-- 写真 -->
                                                 <a href="/posts/{{$post->id}}">
-                                                    <img src="{{ $post->image_path }}" class="lg:h-48 md:h-36 h-24 w-full object-cover object-center hover:scale-110 duration-700">
+                                                    <img src="{{ $post->image_path }}" class="rounded-lg lg:h-48 md:h-36 h-24 w-full object-cover object-center hover:scale-110 duration-700">
                                                 </a>
                                                 
                                                 <div class="hidden md:inline-block md:w-full md:px-6 md:py-3">
