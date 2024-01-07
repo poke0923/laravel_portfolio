@@ -27,21 +27,34 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="p-6 text-gray-900">
+                        @if($header!==null)
                         <div class="relative">
-                            <div class="absolute p-6">テスト</div> 
-                            <img src="{{ $header->image_path }}" class="h-48 w-full overflow-hidden object-cover">
-                            
+                            <div class="absolute px-6 py-24 h-full items-center justify-center bg-white bg-opacity-50">
+                                <div class="shrink-0 flex items-center">
+                                    <div class="inline-flex items-end tracking-widest">
+                                        <p class="title-font font-medium  text-gray-900 text-6xl">P</p>
+                                        <p class=" text-gray-500 text-2xl">hoto</p>
+                                        <p class="title-font font-medium  text-gray-900 text-6xl">P</p>
+                                        <p class=" text-gray-500 text-2xl">lace</p>
+                                    </div>
+                                </div>
+                            </div> 
+                            <img src="{{ $header->image_path }}" class="h-80 w-full overflow-hidden object-cover ">
                         </div>
+                        @endif
                         
                         <!-- 投稿一覧表示ここから -->
+                        <h1 class="mt-12 underline underline-offset-4 decoration-orange-700 text-2xl">投稿一覧</h1>
                         <section class="text-gray-600 body-font">
-                            <div class="container px-2 py-24 mx-auto">
+                            <div class="container px-2 py-12 mx-auto">
                                 <div class="flex flex-wrap -m-4">
                                     @foreach($posts as $post)
                                         <div class="p-1 w-1/3">
                                             <div class="bg-white h-full sm:border-1 sm:border-gray-200 sm:border-opacity-60 sm:rounded-lg overflow-hidden">
                                                 <!-- 写真 -->
-                                                <img src="{{ $post->image_path }}" class="lg:h-48 md:h-36 h-24 w-full object-cover object-center">
+                                                <a href="/posts/{{$post->id}}">
+                                                    <img src="{{ $post->image_path }}" class="lg:h-48 md:h-36 h-24 w-full object-cover object-center hover:scale-110 duration-700">
+                                                </a>
                                                 
                                                 <div class="hidden md:inline-block md:w-full md:px-6 md:py-3">
                                                     <div class="flex items-center flex-wrap ">
@@ -122,14 +135,14 @@
                             </div>
                         </section>
   
-       
+                           {{$posts->appends(request()->query())->links('vendor.pagination.tailwind')}}
+                             <!--https://qiita.com/wbraver/items/b95814d6383172b07a58-->
                         </div>
                     </div>
             </div>
         </div>
          
-         {{$posts->appends(request()->query())->links()}}
-         <!--https://qiita.com/wbraver/items/b95814d6383172b07a58-->
+         
          
          
          <!-- 削除機能のポップアップここから -->
