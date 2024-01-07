@@ -28,9 +28,9 @@
             <div class="flex justify-center">
                 <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">{{$post->title}}</h1>
             </div>
-            <div class="flex space-x-4 justify-center pb-2">
-              <div class="inline-flex items-center">投稿日：{{ $post->created_at->toDateString() }}</div>
-              <div class="flex items-center">
+            <div class="flex flex-col sm:flex-row sm:space-x-4 justify-center pb-2">
+              <div class="inline-flex items-center justify-center">投稿日：{{ $post->created_at->toDateString() }}</div>
+              <div class="flex items-center justify-center">
                 <a href={{ route('profile',$post->user_id) }}>投稿者：{{$post->user->name}}</a>
                 <div class="inline-flex items-center ml-2">
                   @if($post->user_id !== Auth::user()->id )
@@ -94,7 +94,7 @@
             </div>
         </div>
         
-              <div class="px-12 sm:px-56 flex justify-center h-96">
+              <div class="px-12 md:px-48 flex justify-center h-96">
                 <img src="{{ $post->image_path }}" class="rounded-lg object-center object-cover" >
               </div>
               
@@ -102,7 +102,7 @@
                 <p class="leading-relaxed text-md mb-4 whitespace-pre-wrap">{{$post->body}}</p>
               </div>
               
-              <div class="flex flex-col sm:flex-row mt-5 px-12 sm:px-48">
+              <div class="flex flex-col sm:flex-row mt-5 px-12 md:px-48">
                 <div class="sm:flex sm:flex-col inline-flex justify-center sm:w-1/3 text-center sm:pr-8 sm:py-8 space-x-8 sm:space-x-0">
                   <div class="flex flex-col items-center text-center justify-center">
                     <h2 class="font-medium title-font text-gray-900 text-lg">Category</h2>
