@@ -28,9 +28,9 @@ class FollowController extends Controller
     
     //フォロー中のユーザーの投稿一覧取得　https://newmonz.jp/lesson/laravel-basic/chapter-9　「ブックマークした記事一覧を取得」を参考
     public function follows_posts(Category $category, Post $post){
-        $followee = Follow::where('follower_id',\Auth::user()->id)->get();
+        $followeeId = \Auth::user()->followers()->pluck('followee_id');
         
-        $post_follow = $post->whereIn('user_id', $followee->pluck('followee_id')->toArray())->orderBy( 'updated_at', 'desc' )->paginate(3);
+        $post_follow = $post->whereIn('user_id', $followeeId)->orderBy( 'updated_at', 'desc' )->paginate(9);
         $header = $post->inRandomOrder()->first();
     
         return view('posts.followees_posts_index',compact('header'))->with([

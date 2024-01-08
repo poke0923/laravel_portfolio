@@ -16,8 +16,8 @@ class Category extends Model
     }
     
     public function getCategoryPaginate(){
-        return $this->posts()->with('category')->orderBy('updated_at','desc')->paginate(6);
-        //基本的な形は$this->posts()->paginate();
+        return $this->posts()->with('category')->orderBy('updated_at','desc')->paginate(9);
+        //基本的な形は$this->posts()->paginate();（1対多のリレーション）
         //with('category')はEagerロードと呼ばれ、データベースへのアクセスを1回で済ませてくれる手法
         /*
         リレーション先のデータを取り出すコードの書き方の手順は

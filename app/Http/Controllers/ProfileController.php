@@ -62,7 +62,7 @@ class ProfileController extends Controller
     
     public function profile(User $user, Post $post){
         $header = $post->inRandomOrder()->first();
-        $post_user = $post->where('user_id', $user->id)->orderBy( 'updated_at', 'desc' )->paginate(3);
+        $post_user = $post->with(['category','tags','favorites'])->where('user_id', $user->id)->orderBy( 'updated_at', 'desc' )->paginate(9);
         
         return view('profile.user',compact('user','header'))->with([ 'posts'=>$post_user ]);
     }
