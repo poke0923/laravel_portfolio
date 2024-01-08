@@ -134,8 +134,8 @@
                       <div id="map" class="object-cover object-center h-full w-full"></div>
                     </div>
                     <div class="flex flex-col justify-start sm:flex sm:flex-row mt-2">
-                      <div>lat: <input id="lat" name="post[latitude]" type="text" class="rounded-lg bg-gray-100 border-0" value="{{$post->latitude}}"></div>
-                      <div class="mt-2 sm:mt-0 sm:ml-2">lng: <input id="lng" name="post[longitude]" type="text" class="rounded-lg bg-gray-100 border-0" value="{{$post->longitude}}"></div>
+                      <input id="lat" name="post[latitude]" type="hidden" class="rounded-lg bg-gray-100 border-0" value="{{$post->latitude}}">
+                      <input id="lng" name="post[longitude]" type="hidden" class="rounded-lg bg-gray-100 border-0" value="{{$post->longitude}}">
                     </div>
                     <div class="flex justify-between">
                       <div>

@@ -10,7 +10,7 @@
         @vite('resources/css/app.css')
        
 
-        <title>Laravel</title>
+        <title>PhotoPlace</title>
 
 
     </head>
@@ -48,12 +48,12 @@
                         <div>
                             <form action="{{ route('index') }}" method="GET" class="text-sm bg-gray-100 border border-gray-200 rounded px-8 pt-6 pb-8 m-4">
                             @csrf
-                                <input type="text" name="keyword">
+                                <input type="text" name="keyword" value="{{ session('serch_keyword')}}">
                                 <select name="category_id">
-                                    <option value="0">すべて</option>
+                                    <option value="0" >すべて</option>
                                     
                                     @foreach($categories as $category)
-                                        <option value="{{$category->id}}">{{ $category->name }}</option>
+                                        <option value="{{$category->id}}" {{ $category->id == session('serch_categoryId') ? "selected":"" }} >{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                                 </br>
@@ -64,7 +64,7 @@
                                         </label>
                                         <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
                                             @foreach($tags_spot as $tag)
-                                                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                                <option value="{{$tag->id}}" {{ in_array($tag->id, session('serch_tagsId')) ? "selected":"" }}>{{$tag->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -74,7 +74,7 @@
                                         </label>
                                         <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
                                             @foreach($tags_nature as $tag)
-                                                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                                <option value="{{$tag->id}}" {{ in_array($tag->id, session('serch_tagsId')) ? "selected":"" }}>{{$tag->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -84,7 +84,7 @@
                                         </label>
                                         <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
                                             @foreach($tags_animal as $tag)
-                                                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                                <option value="{{$tag->id}}" {{ in_array($tag->id, session('serch_tagsId')) ? "selected":"" }}>{{$tag->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
