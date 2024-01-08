@@ -36,43 +36,41 @@ class Post extends Model
     
     public function search($keyword, $categoryId,$tagsId, $pagination)
     {
-        //dd($categoryId);
-        //投稿データを全件取得
+        //投稿データに対してのクエリ実行の準備
         $query = self::query();
         
-        //投稿検索(キーワード) https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
-        //投稿検索(キーワード) https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
+        //キーワード検索 https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
         if (!empty($keyword)) {
             $query->where('title', 'LIKE', "%{$keyword}%")
                   ->orWhere('body', 'LIKE', "%{$keyword}%");
         }
         
-        //投稿検索（カテゴリー） https://qiita.com/hinako_n/items/96584b4a641097c753c7
+        //カテゴリー検索 https://qiita.com/hinako_n/items/96584b4a641097c753c7
         if (!empty($categoryId)) {
-            $query->where('category_id', 'LIKE', $categoryId);
+            $query->where('category_id', '=', $categoryId);
         }
         
+        //タグ検索
         if (!empty($tagsId)) {
             $query->whereHas('tags',function($q)use($tagsId){
                 $q->whereIn('post_tag.tag_id',$tagsId);
             });
         }
-        //dd($query);
-        //dd($query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->get());
         
         return $query->with(['category','tags','favorites'])->orderBy('updated_at', 'desc')->paginate($pagination);
     }
     
     //その投稿のお気に入り状態の判別 https://qiita.com/phper_sugiyama/items/9a4088d1ca816a7e3f29
     public function is_favorited($post){
-        $id = \Auth::id(); //これいらない？
-
-        return $favorite=Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
+        //ここの場合はFavoriteモデルをインスタンス化せずに検索をしている。
+        //show.bladeから受け取った投稿のidとログイン中のユーザーid両方に一致するレコードを検索してtrueかfalseを返している。
+        return $favorite = Favorite::where('post_id', $post->id)->where('user_id', auth()->user()->id)->exists();
     }
     
-    //
+    //お気に入りの投稿を取得
     public function favorite_posts(){
-        return \Auth::user() -> favorite_posts() -> orderBy( 'updated_at', 'desc' ) -> paginate($this->paginate);
+        //リレーションで設定したfavorite_postsのメソッドを経由してuser_idに紐づくpost_idを取得している
+        return \Auth::user()->favorite_posts()->with(['category','tags','favorites'])->orderBy( 'updated_at', 'desc' )->paginate($this->paginate);
     }
     
     //お気に入り数の多い投稿順に取得
@@ -82,8 +80,7 @@ class Post extends Model
         return $post;
     }
     
-    
-    //投稿ごとのタグ取得
+    //投稿ごとのタグ取得（多対多のリレーションのため、一度投稿ごとにこのメソッドを呼び出してタグを取得してviewに返している。）
     public function post_tags($post){
         $tags = $post->tags()->get();
         return $tags;
@@ -92,12 +89,12 @@ class Post extends Model
     
     //フォロー状態の判別
     public function is_followed($post){
-        return $follow=Follow::where('follower_id', \Auth::user()->id)->where('followee_id', $post->user->id)->exists();
+        return $follow = Follow::where('follower_id', \Auth::user()->id)->where('followee_id', $post->user->id)->exists();
     }
     
     //フォロワー数のカウント
     public function follow_count($post){
-        return $count = \App\Models\Follow::where('followee_id', $post->user_id)->count();
+        return $count = Follow::where('followee_id', $post->user_id)->count();
     }
     
     protected $fillable=[

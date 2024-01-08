@@ -13,14 +13,8 @@ class Tag extends Model
         return $this -> belongsToMany(Post::class);
     }
     
-    //投稿編集画面でのタグの初期値設定
-    public function tagCheck($selectedTags,$tag){
-        
-        foreach($selectedTags as $selectedTag){
-            if($selectedTag->id === $tag->id){
-                return true; 
-            }    
-        }    
-        
+    //タグごとの投稿取得
+    public function getTagPaginate(){
+        return $this->posts()->with('tags')->orderBy( 'updated_at','desc' )->paginate(9);
     }
 }

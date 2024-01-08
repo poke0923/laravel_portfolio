@@ -21,7 +21,7 @@ class FavoriteController extends Controller
     //お気に入り削除
     public function unfavorite(Post $post, Request $request){
         $user = \Auth::user()->id;
-        $favorite = Favorite::where( 'post_id', $post->id )->where( 'user_id', $user )->first();
+        $favorite = Favorite::where( 'post_id', $post->id )->where( 'user_id', $user )->first(); //post_idとuser_id両方に一致するfavoriteのrecordを取得
         $favorite -> delete();
         return back();
     }
