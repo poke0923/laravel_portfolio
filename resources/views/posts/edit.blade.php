@@ -161,13 +161,20 @@
               mapTypeId: "roadmap",
             });
             
+            // マーカーを初期位置に追加
+            const initialMarker = new google.maps.Marker({
+                map,
+                position: { lat: {{$post->latitude === null ? 35.6812362: $post->latitude }}, lng: {{$post->longitude === null ? 139.7671248:$post->longitude}} },
+                title: "initialPosition"
+            });
+            
             
             // Create the search box and link it to the UI element.
             const input = document.getElementById("pac-input");
             const searchBox = new google.maps.places.SearchBox(input);
             
           
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            
             // Bias the SearchBox results towards current map's viewport.
             map.addListener("bounds_changed", () => {
               searchBox.setBounds(map.getBounds());
