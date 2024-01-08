@@ -28,7 +28,7 @@
             <div class="flex justify-center">
                 <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">{{$post->title}}</h1>
             </div>
-            <div class="flex flex-col sm:flex-row sm:space-x-4 justify-center pb-2">
+            <div class="flex flex-col sm:flex-row space-x-0 sm:space-x-4 justify-center pb-2">
               <div class="inline-flex items-center justify-center">投稿日：{{ $post->created_at->toDateString() }}</div>
               <div class="flex items-center justify-center">
                 <a href={{ route('profile',$post->user_id) }}>投稿者：{{$post->user->name}}</a>
@@ -129,7 +129,7 @@
                 </div>
                 
               </div>
-              <div class="flex justify-center space-x-8">
+              <div class="flex justify-center space-x-8 my-4">
                 <a href="{{url()->previous()}}" class="text-indigo-500 inline-flex items-center">前のページに戻る</a>
                 <a href="/" class="text-indigo-500 inline-flex items-center">投稿一覧に戻る</a>
               </div>

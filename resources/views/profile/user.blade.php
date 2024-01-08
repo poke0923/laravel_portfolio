@@ -10,7 +10,7 @@
         @vite('resources/css/app.css')
        
 
-        <title>Laravel</title>
+        <title>PhotoPlace</title>
 
 
     </head>
@@ -47,6 +47,9 @@
                         <h1 class="mt-12 underline underline-offset-4 decoration-orange-700 text-2xl">投稿一覧</h1>
                         <section class="text-gray-600 body-font">
                             <div class="container px-2 py-12 mx-auto">
+                                @if( $posts->isEmpty())
+                                <div>条件に当てはまる投稿がありません</div>
+                                @else
                                 <div class="flex flex-wrap -m-4">
                                     @foreach($posts as $post)
                                         <div class="p-1 w-1/3">
@@ -132,6 +135,7 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                @endif
                             </div>
                         </section>
   

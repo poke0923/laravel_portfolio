@@ -32,14 +32,15 @@ class Post extends Model
         return $this -> belongsToMany(Tag::class);
     }
     
-    private $paginate=6;
+    private $paginate=9;
     
     public function search($keyword, $categoryId,$tagsId, $pagination)
     {
-        
+        //dd($categoryId);
         //投稿データを全件取得
         $query = self::query();
         
+        //投稿検索(キーワード) https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
         //投稿検索(キーワード) https://qiita.com/hinako_n/items/7729aa9fec522c517f2a
         if (!empty($keyword)) {
             $query->where('title', 'LIKE', "%{$keyword}%")

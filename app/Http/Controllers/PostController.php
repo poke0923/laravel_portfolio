@@ -16,15 +16,28 @@ class PostController extends Controller
     //投稿一覧表示
     public function index(Request $request, Post $post, Category $category, Tag $tag){
         //Requestのパラメータを取得
-        
         $keyword = $request->input('keyword');
         $categoryId = $request->input('category_id');
         $tagsId = $request->input('tag');
         $pagination = 9;
         $header = $post->inRandomOrder()->first();
         
-        return view('posts.index', compact('header') )->with([
-            'posts' => $post->search($keyword,$categoryId,$tagsId,$pagination), //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
+        $post=$post->search($keyword,$categoryId,$tagsId,$pagination); //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
+        
+        if($tagsId == null){
+            $tagsId = [];
+        }
+        
+        session([
+            'serch_keyword'=>$keyword,
+            'serch_categoryId'=>$categoryId,
+            'serch_tagsId'=>$tagsId,
+            ]);
+            
+        
+        
+        return view('posts.index', compact('header','keyword','categoryId','tagsId') )->with([
+            'posts' => $post,
             'categories' => $category->get(),
             'tags_spot' => $tag->where('group','spot')->get(),
             'tags_nature' => $tag->where('group','nature')->get(),
