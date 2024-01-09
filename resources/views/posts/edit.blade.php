@@ -43,18 +43,18 @@
                 <form action="/posts/{{$post->id}}/edit" method="POST" enctype="multipart/form-data">
                   @csrf
                   @method('PUT')
-                  <div class="flex flex-col sm:flex sm:flex-row">
-                    <section class="w-full sm:w-1/3">
+                  <div class="flex flex-col lg:flex lg:flex-row">
+                    <section class="w-full lg:w-1/3">
                       <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">投稿タイトル</h2>
-                      <input type="text" name="post[title]" value="{{ old('post.title',$post->title) }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-200 border-0">
+                      <input type="text" name="post[title]" value="{{ old('post.title',$post->title) }}" class="w-full lg:w-5/6 mr-2 rounded-lg bg-gray-200 border-0">
                       <p class="error">{{$errors->first('post.title')}}</p>
                         <!--
                         nameで指定した入れ子の構造（post[title]）は
                         それ以降は「.（ドット）」で繋いで取り出すことができる
                         -->
                       <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真説明</h2>
-                      <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-200 border-0">{{ old('post.body',$post->body) }}</textarea>
-                      
+                      <textarea name="post[body]" class="h-36 w-full lg:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-200 border-0">{{ old('post.body',$post->body) }}</textarea>
+                      <p class="error">{{$errors->first('post.body')}}</p>
                       
                       <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">カテゴリー</h2>
                       <select id="category" name="post[category_id]" class="rounded-lg border-0">
@@ -64,27 +64,28 @@
                       </select>
                     </section>
                     
-                    <section class="w-full mt-4 sm:mt-0 sm:w-2/3 flex flex-col items-center justify-center">
-                      <h2 class="sm:hidden underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真選択</h2>
-                      <div class="flex flex-col sm:flex sm:flex-row items-center space-x-8">
+                    <section class="w-full mt-4 lg:mt-0 lg:w-2/3 flex flex-col items-center justify-center">
+                      <h2 class="lg:hidden underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真選択</h2>
+                      <div class="flex flex-col lg:flex lg:flex-row items-center space-x-8">
                         <div>
-                          <h2 class="invisible sm:visible underline underline-offset-4 decoration-orange-700 mb-2">画像変更</h2>
+                          <h2 class="invisible lg:visible underline underline-offset-4 decoration-orange-700 mb-2">画像変更</h2>
                           <img src="{{ $post->image_path }}" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
                         </div>
                         
-                          <div class="invisible sm:visible ">
+                          <div class="invisible lg:visible ">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
                           </div>
-                          <div class="sm:hidden mb-4">
+                          <div class="lg:hidden mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
                             </svg>
                           </div>
                         <div class="flex flex-col justify-center items-center ">
-                          <img id="preview" src="" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
+                          <img id="preview" src="" class="max-w-48 max-h-48 lg:max-w-72 lg:max-h-72 mb-2">
                           <input type="file" name="image" onchange="previewImage(this);">
+                          <p class="error">{{$errors->first('image')}}</p>
                         </div>
                       </div>
                     </section>

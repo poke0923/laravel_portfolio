@@ -19,7 +19,8 @@
         <style>
             .error{
                 color:red;
-                font-weight:bold
+                font-weight:bold;
+                font-size: 1em;
             }
         </style>
         
@@ -46,7 +47,7 @@
                                     <h2 class="underline underline-offset-4 decoration-orange-700 mb-2">投稿タイトル</h2>
                                     
                                     <input type="text" name="post[title]" value="{{ old('post.title') }}" class="w-full sm:w-5/6 mr-2 rounded-lg bg-gray-200 border-0">
-                                    <p class="error">{{$errors->first('post.title')}}</p>
+                                    <div class="error">{!!$errors->first('post.title')!!}</div>
                                     
                                     <!--
                                     nameで指定した入れ子の構造（post[title]）は
@@ -55,14 +56,14 @@
                                     
                                     <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真説明</h2>
                                     <textarea name="post[body]" class="h-36 w-full sm:w-5/6 mr-2 whitespace-pre-wrap rounded-lg bg-gray-200 border-0">{{ old('post.body') }}</textarea>
-                                    <p class="error">{{$errors->first('post.body')}}</p>
+                                    <div class="error">{!!$errors->first('post.body')!!}</div>
                                     <!--
                                     バリデーションのエラーメッセージのattributeはリクエストクラス（PostRequest）で指定できる
                                     -->
                                     <h2 class="underline underline-offset-4 decoration-orange-700 mb-2 mt-4">カテゴリー</h2>
                                     <select name="post[category_id]" class="rounded-lg border-0">
                                         @foreach($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->name}}</option>
+                                            <option value="{{$category->id}}" {{ $category->id == old('post.category_id') ? "selected":"" }}>{{$category->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -72,7 +73,7 @@
                                         <img id="preview" src="" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
                                     </div>
                                     <input type="file" name="image" onchange="previewImage(this);">
-                                    <p class="error">{{$errors->first('image')}}</p>
+                                    <div class="error">{!!$errors->first('image')!!}</div>
                                     
                                 </div>
                             </div>
@@ -85,7 +86,7 @@
                                     </label>
                                     <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
                                         @foreach($tags_spot as $tag)
-                                            <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                            <option value="{{$tag->id}}" {{ in_array($tag->id, old('tag',[])) ? "selected":"" }}>{{$tag->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -95,7 +96,7 @@
                                     </label>
                                     <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
                                         @foreach($tags_nature as $tag)
-                                            <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                            <option value="{{$tag->id}}" {{ in_array($tag->id, old('tag',[])) ? "selected":"" }}>{{$tag->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -105,7 +106,7 @@
                                     </label>
                                     <select name="tag[]" class="js-example-basic-multiple", style="width: 100%" data-placeholder="Select a tag..." data-allow-clear="false" multiple="multiple" title="Select tag..." >
                                         @foreach($tags_animal as $tag)
-                                            <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                            <option value="{{$tag->id}}" {{ in_array($tag->id, old('tag',[])) ? "selected":"" }}>{{$tag->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -123,8 +124,8 @@
                                 <div id="map" class="object-cover object-center h-full w-full"></div>
                             </div>
                             <div class="flex flex-col justify-start sm:flex sm:flex-row mt-2">
-                                <input id="lat" name="post[latitude]" type="hidden" class="rounded-lg bg-gray-100 border-0">
-                                <input id="lng" name="post[longitude]" type="hidden" class="rounded-lg bg-gray-100 border-0">
+                                <input id="lat" name="post[latitude]" type="hidden" class="rounded-lg bg-gray-100 border-0" value="{{ old('post.latitude') }}">
+                                <input id="lng" name="post[longitude]" type="hidden" class="rounded-lg bg-gray-100 border-0" value="{{ old('post.longitude') }}">
                             </div>
                             
                             <div class="flex justify-between">
@@ -147,11 +148,22 @@
 
         <script>
           function initAutocomplete() {
+            const defaultLatitude = {{ old('post.latitude') !== null ? old('post.latitude') : 35.6812362 }};
+            const defaultLongitude = {{ old('post.longitude') !== null ? old('post.longitude') : 139.7671248 }};
+            
             const map = new google.maps.Map(document.getElementById("map"), {
-              center: { lat: 35.6812362, lng: 139.7671248 },
+              center: { lat: defaultLatitude , lng: defaultLongitude },
               zoom: 13,
               mapTypeId: "roadmap",
             });
+            
+            // マーカーを初期位置に追加
+            const initialMarker = new google.maps.Marker({
+                map,
+                position: { lat: defaultLatitude, lng: defaultLongitude },
+                title: "initialPosition"
+            });
+            
             // Create the search box and link it to the UI element.
             const input = document.getElementById("pac-input");
             const searchBox = new google.maps.places.SearchBox(input);

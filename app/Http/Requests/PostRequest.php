@@ -26,16 +26,20 @@ class PostRequest extends FormRequest
         
         return [
             'post.title' => 'required|max:50',
+            'post.body' => 'max:200',
             'image' => 'required',
             
         ];
     }
-    
-    public function attributes()
+    public function messages()
     {
-    return [
-        'post.title' => '投稿タイトル',
-        'image' => '写真'
-    ];
+        return [
+            'image' => '写真を選択してください。',
+            'post.title.required' => 'タイトルは必ず入力してください。写真を再選択してください。',
+            'post.title.max' => 'タイトルは50文字以内で入力してください。写真を再選択してください。',
+            'post.body.max' => '写真説明は200文字以内で入力してください。写真を再選択してください。',
+            
+        ];
     }
+    
 }
