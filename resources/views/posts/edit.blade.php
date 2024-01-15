@@ -66,10 +66,11 @@
                     
                     <section class="w-full mt-4 lg:mt-0 lg:w-2/3 flex flex-col items-center justify-center">
                       <h2 class="lg:hidden underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真選択</h2>
-                      <div class="flex flex-col lg:flex lg:flex-row items-center space-x-8">
+                      <h2 class="invisible lg:visible underline underline-offset-4 decoration-orange-700 mb-8 ">画像変更</h2>
+                      <div class="flex flex-col lg:flex lg:flex-row items-center justify-center space-x-8">
                         <div>
-                          <h2 class="invisible lg:visible underline underline-offset-4 decoration-orange-700 mb-2">画像変更</h2>
-                          <img src="{{ $post->image_path }}" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
+                          
+                          <img src="{{ session()->has('preImage') ? session()->get('preImage') :$post->image_path }}" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
                         </div>
                         
                           <div class="invisible lg:visible ">
@@ -83,9 +84,15 @@
                             </svg>
                           </div>
                         <div class="flex flex-col justify-center items-center ">
-                          <img id="preview" src="" class="max-w-48 max-h-48 lg:max-w-72 lg:max-h-72 mb-2">
-                          <input type="file" name="image" onchange="previewImage(this);">
+                          <img id="preview" src="{{ session()->get('newImage') }}" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2 ">
+                          <button id="fileSelect" type="button" class="bg-gray-500 hover:bg-gray-400 text-white rounded px-4 py-2">画像を選択</button>
+                          <input type="file" id="image" name="image" style="display:none" onchange="previewImage(this);">
+                          <input type="hidden" name="post[new_image_path]" value="{{ session()->has('newImage') ? session()->get('newImage') :"" }}">
                           <p class="error">{{$errors->first('image')}}</p>
+                          <!--
+                          基本的にcreateと同じだが、preImageとnewImageを使い分ける必要があったので、Controllerで処理を変えてる。
+                          あとは同じ。
+                          -->
                         </div>
                       </div>
                     </section>
@@ -238,6 +245,16 @@
           }
           
           window.initAutocomplete = initAutocomplete;
+        </script>
+        <script>
+            const fileSelect = document.getElementById("fileSelect");
+            const image = document.getElementById("image");
+            
+            fileSelect.addEventListener("click", (e) => {
+              if (image) {
+                image.click();
+              }
+            }, false);
         </script>
         <script>
           function previewImage(obj)

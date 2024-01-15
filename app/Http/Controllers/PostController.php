@@ -24,7 +24,7 @@ class PostController extends Controller
         
         //モデルでserchメソッドを実行
         //メソッドの引数に入れてあげればModelで引き継げる　https://qiita.com/satorunooshie/items/c4b8fa611d9de632381f
-        $post=$post->search($keyword,$categoryId,$tagsId,$pagination); 
+        $post = $post->search($keyword,$categoryId,$tagsId,$pagination); 
         
         //検索結果保持の際にtagsIdがnullの場合は空の集合に書き換え
         if($tagsId == null){
@@ -33,9 +33,9 @@ class PostController extends Controller
         
         //検索結果を保持するための仕組み。view側で呼び出すことができる。
         session([
-            'serch_keyword'=>$keyword,
-            'serch_categoryId'=>$categoryId,
-            'serch_tagsId'=>$tagsId,
+            'serch_keyword' => $keyword,
+            'serch_categoryId' => $categoryId,
+            'serch_tagsId' => $tagsId,
             ]);
             
         
@@ -73,14 +73,48 @@ class PostController extends Controller
         ]);
     }
     
-    //新規投稿保存（PostRequestにバリデーションをかけている）
+    //新規投稿保存
     public function store(PostRequest $request, Post $post){
 
         //s3アップロード開始
-        $image = $request->file('image'); //requestからfileの内容を取得
-        $path = Storage::disk('s3')->putFile('/', $image); // バケットへアップロードしてそのパスを取得
-        $post->image_path = Storage::disk('s3')->url($path); // アップロードした画像のフルパス(URL)を取得してimage_pathにinput
+        if($request->file('image') !== null){
+            $image = $request->file('image'); //requestからfileの内容を取得
+            $path = Storage::disk('s3')->putFile('/', $image); // バケットへアップロードしてそのパスを取得
+            $post->image_path = Storage::disk('s3')->url($path); // アップロードした画像のフルパス(URL)を取得してimage_pathにinput
+        }else{
+            $post->image_path = $request->input('post.image_path');
+        }
         
+        //保存した画像パスをセッションに保存
+        $request->session()->flash('image', $post->image_path);
+        
+        //画像保存処理をしていないときとしているときでバリデーションを分ける
+        //これをしないと画像以外のバリデーションで戻されたときにファイル選択しなおす必要がある。
+        if($post->image_path === null){
+            $validated = $request->validate([
+                'post.title' => 'required|max:50',
+                'post.body' => 'max:200',
+                'image' => 'required',
+            ],
+            [
+                'image' => '写真を選択してください。',
+                'post.title.required' => 'タイトルは必ず入力してください。',
+                'post.title.max' => 'タイトルは50文字以内で入力してください。',
+                'post.body.max' => '写真説明は200文字以内で入力してください。',
+                
+            ]); 
+        }else{
+            $validated = $request->validate([
+                'post.title' => 'required|max:50',
+                'post.body' => 'max:200',
+            ],
+            [
+                'post.title.required' => 'タイトルは必ず入力してください。',
+                'post.title.max' => 'タイトルは50文字以内で入力してください。',
+                'post.body.max' => '写真説明は200文字以内で入力してください。',
+                
+            ]); 
+        }
         //ログイン中のユーザーIDをinput　https://newmonz.jp/lesson/laravel-basic/chapter-8
         $post->user_id = \Auth::id();
         
@@ -110,12 +144,35 @@ class PostController extends Controller
     
     //投稿編集保存
     public function update(EditRequest $request,Post $post){
+        //変更前のimageのパスを取得。新しい画像しかパスが残らない。
+        $preImage = $post->image_path;
+        $request->session()->flash('preImage', $preImage);
+        
         //s3アップロード開始（新規投稿と同じ処理）
         if($request->file('image') !== null){
             $image = $request->file('image');
             $path = Storage::disk('s3')->putFile('/', $image);
             $post->image_path = Storage::disk('s3')->url($path);
+        }elseif($request->has('post.new_image_path') ){ //imageの変更 → エラーで戻される → もう一度他を修正して保存　の時に$post->image_pathに一度保存したパスを入れている
+            $post->image_path = $request->input('post.new_image_path');
         }
+        
+        //元の画像と今image_pathにあるパスが違うときはセッションに新しい画像のパスを保存
+        if($preImage != $post->image_path){
+            $request->session()->flash('newImage', $post->image_path);
+        }
+        
+        $validated = $request->validate([
+                'post.title' => 'required|max:50',
+                'post.body' => 'max:200',
+            ],
+            [
+                'post.title.required' => 'タイトルは必ず入力してください。',
+                'post.title.max' => 'タイトルは50文字以内で入力してください。',
+                'post.body.max' => '写真説明は200文字以内で入力してください。',
+                
+            ]); 
+        
         
         //updateで更新処理
         $post->update($request['post']);

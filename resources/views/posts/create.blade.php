@@ -70,11 +70,18 @@
                                 <div class="w-full mt-4 sm:mt-0 sm:w-1/2 flex flex-col items-center justify-center">
                                     <h2 class="sm:hidden underline underline-offset-4 decoration-orange-700 mb-2 mt-4">写真選択</h2>
                                     <div>
-                                        <img id="preview" src="" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
+                                        <img id="preview" src="{{ session()->get('image') }}" class="max-w-48 max-h-48 sm:max-w-72 sm:max-h-72 mb-2">
                                     </div>
-                                    <input type="file" name="image" onchange="previewImage(this);">
-                                    <div class="error">{!!$errors->first('image')!!}</div>
-                                    
+                                    <button id="fileSelect" type="button" class="bg-gray-500 hover:bg-gray-400 text-white rounded px-4 py-2">画像を選択</button>
+                                    <input type="file" id="image" name="image" style="display:none" onchange="previewImage(this);">
+                                    <input type="hidden" name="post[image_path]" value="{{ session()->has('image') ? session()->get('image') :"" }}">
+                                    <div class="error" >{!!$errors->first('image')!!}</div>
+                                    <!--
+                                    previewにはセッションに保存されたパスがあればそれを表示。画像を再選択したらそちらの画像に更新される。
+                                    buttonと次のinputは画像選択ボタン。input type=fileのデフォルトのボタンだとエラーでリダイレクトしたときに
+                                    「画像が選択されていません」と出てしまうため、それを隠してボタンを新しく作っている。jsでinputもclick判定している。
+                                    →次のinputは、この時、ファイルは実際選択されていないが前に保存処理はしているので、それをrequestから保存するためのタグ。
+                                    -->
                                 </div>
                             </div>
                             
@@ -230,6 +237,16 @@
           }
           
           window.initAutocomplete = initAutocomplete;
+        </script>
+        <script>
+            const fileSelect = document.getElementById("fileSelect");
+            const image = document.getElementById("image");
+            
+            fileSelect.addEventListener("click", (e) => {
+              if (image) {
+                image.click();
+              }
+            }, false);
         </script>
         <script>
           function previewImage(obj)
