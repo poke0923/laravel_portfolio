@@ -142,24 +142,29 @@ class PostController extends Controller
         ]);
     }
     
-    //投稿編集保存
+    // 投稿編集保存
     public function update(EditRequest $request,Post $post){
-        //変更前のimageのパスを取得。新しい画像しかパスが残らない。
-        $preImage = $post->image_path;
-        $request->session()->flash('preImage', $preImage);
+        // 変更前のimageのパスを取得。新しい画像しかパスが残らない。
+        $preImagePath = $post->image_path;
+        $request->session()->flash('preImage', $preImagePath);
         
+        $newImagePath = null; // 新規画像パスを保存するための変数
         //s3アップロード開始（新規投稿と同じ処理）
         if($request->file('image') !== null){
             $image = $request->file('image');
             $path = Storage::disk('s3')->putFile('/', $image);
-            $post->image_path = Storage::disk('s3')->url($path);
-        }elseif($request->has('post.new_image_path') ){ //imageの変更 → エラーで戻される → もう一度他を修正して保存　の時に$post->image_pathに一度保存したパスを入れている
-            $post->image_path = $request->input('post.new_image_path');
+            $newImagePath = Storage::disk('s3')->url($path);
+            $post->image_path = $newImagePath;
+            
+        }elseif($request->input('post.new_image_path') !== null ){ // imageの変更後にバリエラーで戻される → もう一度他項目を修正して保存　の時に$post->image_pathに一度保存したパスを入れている
+            $newImagePath = $request->input('post.new_image_path');
+            $post->image_path = $newImagePath;
+            
         }
-        
-        //元の画像と今image_pathにあるパスが違うときはセッションに新しい画像のパスを保存
-        if($preImage != $post->image_path){
-            $request->session()->flash('newImage', $post->image_path);
+        //元の画像と今image_pathにあるパスが違うときはセッションに新しい画像のパスを保存 (newImagePath !== null を付けないとpreImageには絶対にパスが入っているので、毎回nullに更新されてしまう。)
+        if($newImagePath !== null && $preImagePath != $newImagePath){
+            $request->session()->flash('newImage', $newImagePath);
+            
         }
         
         $validated = $request->validate([
